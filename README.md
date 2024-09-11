@@ -26,7 +26,7 @@
   Sebelum melakukan deployment, saya melakukan `git add`, `commit`, dan `push` semua perubahan ini ke repositori GitHub. Selanjutnya, saya mencoba menjalankan proyek Django dengan perintah `python manage.py runserver.` Setelah aplikasi berhasil berjalan di peramban  http://localhost:8000/, kemudian saya melakukan tahap-tahap deployment ke PWS agar proyek yang saya kerjakan bisa diakses di internet.
 
 2. Buatlah bagan yang berisi *request client* ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.  
-   ![][image1]  
+   ![image](https://github.com/user-attachments/assets/c1e13d25-0b7f-46bc-8712-c80eea4cd637)
 1) **`urls.py`**  
 * Django menggunakan file `urls.py` untuk memetakan URL yang diminta oleh client dengan view yang tepat. Saat sebuah URL diminta, Django mencocokkan URL tersebut dengan pola URL yang didefinisikan dalam `urls.py`.  
 * Jika URL cocok, Django akan mengarahkan request tersebut ke fungsi yang sesuai di `views.py`.  

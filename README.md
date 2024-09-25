@@ -178,19 +178,23 @@ Model pada Django disebut sebagai ORM (Object-Relational Mapping) karena Django 
 
 * http://localhost:8000/xml
 
-![][image2]
+![Screenshot (49)](https://github.com/user-attachments/assets/49dc3a95-d4e1-42c0-ae4d-bfad305820f1)
+
 
 * http://localhost:8000/json
 
-![][image3]
+![Screenshot (50)](https://github.com/user-attachments/assets/f67ae7da-e31c-41e1-802b-d1568690cfce)
+
 
 * http://localhost:8000/xml/8616b925-3bf7-4354-9cbf-d418ae2a715f
 
-![][image4]
+![Screenshot (51)](https://github.com/user-attachments/assets/75a039de-3d8b-4358-96ea-2d5aed60c6a9)
+
 
 *  http://localhost:8000/json/8616b925-3bf7-4354-9cbf-d418ae2a715f
 
-![][image5]
+![Screenshot (52)](https://github.com/user-attachments/assets/6bfc24d7-83ce-4666-b9d4-af0c7abc7136)
+
 
 # Tugas Individu 4
 
@@ -215,48 +219,56 @@ Model pada Django disebut sebagai ORM (Object-Relational Mapping) karena Django 
    Berikut ini adalah penjelasan cara kerja salah satu jenis relasi penghubungan model `Product` dengan `User`, yaitu ***ForeignKey*** (relasi satu-ke-banyak):  
 1) Mendefinisikan Model `Product` dan `User`  
    Django memiliki model `User` yang telah disediakan oleh modul `django.contrib.auth.models`. Model ini bisa dihubungkan ke model lain, seperti `Product`, yang kita buat sendiri. Misalkan, setiap produk (`Product`) memiliki pemilik atau pembuat produk yang merupakan pengguna (`User`). Berikut potongan kode untuk mengimpor modul tersebut.  
-   `...`  
-   `from django.contrib.auth.models import User`  
-   `...`  
-2) Menghubungkan Model `Product` dengan `User` menggunakan `ForeignKey` Untuk menghubungkan model `Product` ke `User`, kita dapat menggunakan `ForeignKey` di model `Product`. Ini menciptakan relasi **satu-ke-banyak** di mana satu `User` dapat memiliki banyak `Product`, tetapi setiap `Product` hanya dimiliki oleh satu `User`. Berikut adalah contoh kode yang menunjukkan bagaimana cara kerja penghubungan tersebut pada berkas `models.py` di subdirektori `main`:  
-   `from django.db import models`  
-   `from django.contrib.auth.models import User`  
-   `import uuid`  
-   `class ProductEntry(models.Model):`  
-   	`user = models.ForeignKey(User, on_delete=models.CASCADE)`  
-   	`id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)`  
-   	`name = models.CharField(max_length=255)`  
-   	`price = models.IntegerField()`  
-   	`description = models.TextField()`  
-   	`time = models.DateField(auto_now_add=True)`  
+   ```python
+   ...  
+   from django.contrib.auth.models import User  
+   ...
+   ```  
+3) Menghubungkan Model `Product` dengan `User` menggunakan `ForeignKey` Untuk menghubungkan model `Product` ke `User`, kita dapat menggunakan `ForeignKey` di model `Product`. Ini menciptakan relasi **satu-ke-banyak** di mana satu `User` dapat memiliki banyak `Product`, tetapi setiap `Product` hanya dimiliki oleh satu `User`. Berikut adalah contoh kode yang menunjukkan bagaimana cara kerja penghubungan tersebut pada berkas `models.py` di subdirektori `main`:  
+   ```python
+   from django.db import models  
+   from django.contrib.auth.models import User  
+   import uuid  
+
+   class ProductEntry(models.Model):  
+   	   user = models.ForeignKey(User, on_delete=models.CASCADE)  
+   	   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
+   	   name = models.CharField(max_length=255)  
+   	   price = models.IntegerField()  
+   	   description = models.TextField()  
+   	   time = models.DateField(auto_now_add=True)
+   ```  
 * **Penjelasan kode:**  
   `ForeignKey(User, on_delete=models.CASCADE)` yang digunakan pada kode di atas berfungsi untuk menghubungkan `model Product` dengan `model User.` Kemudian, potongan kode `on_delete=models.CASCADE` berarti jika pengguna `(User)` dihapus, semua produk `(Product)` yang dimiliki pengguna tersebut juga akan dihapus.  
 3) Cara Kerja di Database  
    Setelah kita mendefinisikan relasi ini, Django akan membuat kolom tambahan (`user`) di tabel `Product` yang menyimpan referensi ke `User`. Kolom ini akan berisi ID dari `User` yang menjadi pemilik produk.  
 4) Modifikasi berkas `views.py`  
    Pada berkas `views.py` yang ada pada subdirektori main, lakukan modifikasi kode pada fungsi `create_product_entry` menjadi sebagai berikut:  
-   `def create_product_entry(request):`  
-       `form = ProductEntryForm(request.POST or None)`  
-       `if form.is_valid() and request.method == "POST":`  
-   	   `product_entry = form.save(commit=False)`  
-   	   `product_entry.user = request.user`  
-   	   `form.save()`  
-   	   `return redirect('main:show_main')`  
-       `context = {'form': form}`
+   ```python
+   def create_product_entry(request):  
+       form = ProductEntryForm(request.POST or None)  
+       if form.is_valid() and request.method == "POST":  
+   	   product_entry = form.save(commit=False)  
+   	   product_entry.user = request.user  
+   	   form.save()  
+   	   return redirect('main:show_main')  
+       context = {'form': form}
 
-       `return render(request, "create_product_entry.html", context)`  
+       return render(request, "create_product_entry.html", context)
+   ```  
    **Penjelasan Kode:**  
    Parameter `commit=False` yang digunakan pada potongan kode diatas berguna untuk mencegah Django agar tidak langsung menyimpan objek yang telah dibuat dari `form` langsung ke database. Hal tersebut memungkinkan kita untuk memodifikasi terlebih dahulu objek tersebut sebelum disimpan ke database. Pada kasus ini, kita akan mengisi field `user` dengan objek `User` dari *return value* `request.user`. Penggunaan `request.user` bertujuan agar ketika pengguna menambahkan produk baru, produk tersebut sudah terotorisasi dengan pengguna yang sedang *login*.   
 5) Melakukan filterisasi produk berdasarkan pengguna  
    Ubahlah *value* dari `product_entries` dan `context` pada fungsi `show_main` menjadi seperti berikut.  
-   `def show_main(request):`  
-       `product_entries = ProductEntry.objects.filter(user=request.user)`  
-       `context = {`  
-           `'name': request.user.username,`  
-            `...`  
-       `}`  
-   `...`  
-     
+   ```python
+   def show_main(request):  
+       product_entries = ProductEntry.objects.filter(user=request.user)  
+       context = {  
+           'name': request.user.username,  
+           ...  
+       }  
+   ...  
+   ```  
    **Penjelasan kode:**  
    Kode tersebut berfungsi untuk menampilkan objek `Product Entry` yang terkait dengan pengguna yang sedang *login*. Hal ini dilakukan dengan memfilter seluruh objek dan hanya mengambil Product Entry di mana field `user` diisi dengan objek `User` yang sama dengan pengguna yang sedang *login*.  
 3. **Apa perbedaan antara *authentication* dan *authorization*, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.**  

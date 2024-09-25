@@ -524,8 +524,10 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   ```python  
   ...  
   `from django.contrib.auth.models import User`  
-  ...  
-  Pada model `ProductEntry` yang sudah dibuat, tambahkan potongan kode berikut:  
+  ...
+  ```  
+  Pada model `ProductEntry` yang sudah dibuat, tambahkan potongan kode berikut:
+  ```python
   class ProductEntry(models.Model):  
       user = models.ForeignKey(User, on_delete=models.CASCADE)  
       ...
@@ -545,7 +547,8 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
       return render(request, "create_product_entry.html", context)
   ```  
   Ubahlah *value* dari `product_entries` dan `context` pada fungsi `show_main` menjadi seperti berikut.  
-  `def show_main(request):`  
+  ```python 
+  def show_main(request):`  
       `product_entries = ProductEntry.objects.filter(user=request.user)`  
       `context = {`  
           `'name': request.user.username,`  
@@ -594,9 +597,11 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
       `logout(request)`  
       `response = HttpResponseRedirect(reverse('main:login'))`  
       `response.delete_cookie('last_login')`  
-      `return response`  
+      `return response`
+  ```  
   Modifikasi berkas main.html dengan menambahkan potongan kode berikut di setelah tombol `logout` untuk menampilkan data *last login*.  
-  `...`  
+  ```python
+  ...  
   `<h5>Sesi terakhir login: {{ last_login }}</h5>`  
   `...`
   ```  

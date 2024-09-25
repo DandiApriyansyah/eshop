@@ -583,28 +583,35 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   `...`
 
 * **Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.**  
-    
+    ![image](https://github.com/user-attachments/assets/3da5c497-d6a6-42be-a986-1192f2a194c5)
+
+    ![image](https://github.com/user-attachments/assets/c9876645-602c-4c97-a999-17dc9539e6bf)
+
 * **Menghubungkan model Product dengan User.**  
-  Langkah pertama yang saya lakukan adalah menambahkan kode berikut pada dibawah baris kode untuk mengimpor model pada berkas `models.py` yang ada pada subdirektori `main`:  
-  `...`  
+  Langkah pertama yang saya lakukan adalah menambahkan kode berikut pada dibawah baris kode untuk mengimpor model pada berkas `models.py` yang ada pada subdirektori `main`:
+  ```python  
+  ...  
   `from django.contrib.auth.models import User`  
-  `...`  
+  ...  
   Pada model `ProductEntry` yang sudah dibuat, tambahkan potongan kode berikut:  
-  `class ProductEntry(models.Model):`  
-      `user = models.ForeignKey(User, on_delete=models.CASCADE)`  
-      `...`  
+  class ProductEntry(models.Model):  
+      user = models.ForeignKey(User, on_delete=models.CASCADE)  
+      ...
+  ```  
   Kemudian, ubah potongan kode pada fungsi `create_product_entry` pada berkas `views.py` yang ada pada subdirektori main menjadi sebagai berikut:  
-  `def create_product_entry(request):`  
-      `form = ProductEntryForm(request.POST or None)`  
+  ```python
+  def create_product_entry(request):  
+      form = ProductEntryForm(request.POST or None)  
     
-      `if form.is_valid() and request.method == "POST":`  
-          `product_entry = form.save(commit=False)`  
-          `product_entry.user = request.user`  
-          `form.save()`  
-          `return redirect('main:show_main')`  
+      if form.is_valid() and request.method == "POST":  
+          product_entry = form.save(commit=False)  
+          product_entry.user = request.user  
+          form.save()  
+          return redirect('main:show_main')  
     
-      `context = {'form': form}`  
-      `return render(request, "create_product_entry.html", context)`  
+      context = {'form': form}  
+      return render(request, "create_product_entry.html", context)
+  ```  
   Ubahlah *value* dari `product_entries` dan `context` pada fungsi `show_main` menjadi seperti berikut.  
   `def show_main(request):`  
       `product_entries = ProductEntry.objects.filter(user=request.user)`  

@@ -561,27 +561,33 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   `DEBUG = not PRODUCTION`  
 * **Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.**  
   Untuk menampilkan detail informasi pengguna yang sedang *logged in*, langkah pertama yang saya lakukan adalah *logout* terlebih dahulu apabila sedang menjalankan aplikasi Django. Setelah itu, saya menambahkan import `HttpResponseRedirect`, `reverse`, dan `datetime` pada bagian paling atas di berkas `views.py` yang ada pada subdirektori main.  
-  `import datetime`  
+  ```python
+  import datetime`  
   `from django.http import HttpResponseRedirect`  
-  `from django.urls import reverse`  
+  `from django.urls import reverse`
+  ```  
   Pada fungsi `login_user`, saya menambahkan fungsionalitas dengan menambahkan cookie yang bernama `last_login` untuk melihat kapan terakhir kali pengguna melakukan login. Saya mengganti kode yang ada pada blok `if form.is_valid()` menjadi potongan kode berikut.  
-  `...`  
+  ```python
+  ...  
   `if form.is_valid():`  
       `user = form.get_user()`  
       `login(request, user)`  
       `response = HttpResponseRedirect(reverse("main:show_main"))`  
       `response.set_cookie('last_login', str(datetime.datetime.now()))`  
       `return response`  
-  `...`  
+  `...`
+  ``` 
   Kemudian, pada fungsi `show_main`, tambahkan potongan kode `'last_login': request.COOKIES['last_login']` ke dalam variabel `context`.   
-  `context = {`  
+  ```python
+  context = {`  
           `'name': request.user.username,`  
           `'application' : 'Shopeeta',`  
           `'name' : 'Dandi Apriyansyah',`  
           `'class' : 'PBP A',`  
           `'product_entries': product_entries,`  
           `'last_login': request.COOKIES['last_login'],`  
-         `}`  
+         `}`
+  ``` 
   Setelah itu, saya memodifikasi fungsi `logout_user` menjadi seperti potongan kode berikut.  
   ```python
   def logout_user(request):  

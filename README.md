@@ -657,42 +657,56 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
 # Tugas Individu 5
 
 1. **Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut\!**  
-1) Inline styles (anything inside a style tag)   
-   Inline styles yang ditulis langsung pada elemen HTML memiliki prioritas tertinggi. Inline styles didefinisikan langsung dalam atribut `style` elemen. CSS ini akan memiliki prioritas tertinggi karena ditulis langsung pada elemen `<p>.`  
-2) ID selectors  
+    1) Inline styles (anything inside a style tag)   
+    Inline styles yang ditulis langsung pada elemen HTML memiliki prioritas tertinggi. Inline styles didefinisikan langsung dalam atribut `style` elemen. CSS ini akan memiliki prioritas tertinggi karena ditulis langsung pada elemen `<p>.`  
+    2) ID selectors  
    Selector yang menggunakan ID (`#id`) memiliki spesifisitas yang lebih tinggi dibandingkan classes selector dan elemen selector. CSS selector ini memiliki prioritas yang lebih kuat karena ID dalam satu halaman HTML harus unik.   
-3) Classes selector  
+    3) Classes selector  
    Selector yang menggunakan class (`.class`), pseudo-class (`:hover`, `:nth-child`), atau attribute selector (`[type="text"]`) berada di level prioritas berikutnya setelah ID selector. Jika ada konflik antara class, pseudo-class, atau attribute selector, maka aturan dengan selector yang lebih spesifik akan diterapkan.  
-4) Element selector  
+    4) Element selector  
    Selector yang hanya menggunakan nama tag HTML (misalnya `div`, `p`, `a`) memiliki prioritas paling rendah dibandingkan yang lainnya. Mereka akan diterapkan hanya jika tidak ada selector lain yang lebih spesifik.  
      
 2. **Mengapa *responsive design* menjadi konsep yang penting dalam pengembangan aplikasi *web*? Berikan contoh aplikasi yang sudah dan belum menerapkan *responsive design*\!**
 
 Alasan responsive design menjadi konsep yang penting dalam pengembangan aplikasi web adalah sebagai berikut:
 
-1. **Pengalaman Pengguna yang Konsisten di Berbagai Perangkat**  
+- **Pengalaman Pengguna yang Konsisten di Berbagai Perangkat**  
    Responsive design memastikan tampilan yang optimal dan konsisten, baik pada perangkat mobile, tablet, maupun desktop. Pengguna dapat mengakses website tanpa harus melakukan zoom atau scroll secara horizontal, sehingga mereka dapat dengan mudah menavigasi dan membaca konten.  
-2. **Meningkatkan Aksesibilitas**  
+- **Meningkatkan Aksesibilitas**  
    Dengan responsive design, aplikasi web dapat diakses oleh lebih banyak orang di berbagai jenis perangkat. Ini mendukung inklusivitas, karena pengguna dengan berbagai perangkat (termasuk yang lebih tua atau berbeda resolusinya) tetap dapat menggunakan aplikasi tersebut dengan nyaman.  
-3. **SEO dan Peringkat di Mesin Pencari**  
+- **SEO dan Peringkat di Mesin Pencari**  
    Mesin pencari seperti Google memberi prioritas lebih tinggi kepada website yang responsive karena mereka memberikan pengalaman pengguna yang lebih baik. Dengan menerapkan responsive design, sebuah website dapat meningkatkan ranking SEO dan menarik lebih banyak traffic.  
-4. **Efisiensi Biaya dan Waktu**  
+- **Efisiensi Biaya dan Waktu**  
    Responsive design menghilangkan kebutuhan untuk mengembangkan versi aplikasi yang terpisah untuk desktop dan mobile. Dengan satu basis kode dan desain yang fleksibel, aplikasi web bisa diakses di berbagai perangkat dengan menyesuaikan layout secara otomatis.  
-5. **Adaptasi untuk Perangkat Masa Depan**  
+- **Adaptasi untuk Perangkat Masa Depan**  
    Seiring berkembangnya teknologi dan munculnya perangkat baru dengan berbagai ukuran layar, responsive design memastikan bahwa aplikasi web dapat beradaptasi dengan perangkat baru tanpa perlu perubahan besar.
 
 Contoh aplikasi yang sudah menerapkan responsive design adalah X (Twitter), Airbnb, Google, Spotify, dan sebagainya. Sedangkan contoh aplikas yang belum menerapkan responsivr design adalah Situs Web Institusi Pemerintah Lama dan Situs Sekolah atau Universitas Lama.
 
 3. **Jelaskan perbedaan antara *margin*, *border*, dan *padding*, serta cara untuk mengimplementasikan ketiga hal tersebut\!**  
-1. Margin  
+- Margin  
    Margin adalah jarak antara elemen dengan elemen lain di sekitarnya (spasi di luar border). Margin berfungsi untuk mengosongkan area di sekitar *border* (transparan) dan mengontrol ruang kosong antara elemen dengan elemen lainnya. Margin tidak mempengaruhi ukuran elemen itu sendiri.  
-2. Border  
+   ```python  
+   .element {  
+       margin: 20px; /* Memberikan margin sebesar 20px di semua sisi */  
+   }
+
+	```
+
+- Border  
    Border adalah garis pembatas di sekitar elemen, yang berada di antara margin dan padding. Border berfungsi untuk memberikan visualisasi batas di sekitar elemen, bisa berupa garis dengan berbagai warna, gaya, dan ketebalan.  
-3. Padding   
+   ```python  
+   .element {  
+       border: 2px solid black; /* Memberikan border dengan ketebalan 2px, solid, dan warna hitam */  
+   }  
+   ```  
+- Padding   
    Padding adalah ruang kosong antara konten elemen dan batas elemen (border). Padding berfungsi untuk mengontrol jarak antara konten elemen dengan border. Padding akan memperbesar ukuran elemen secara keseluruhan jika diberikan nilai tanpa mempengaruhi konten di dalamnya.  
-4.   
-     
-     
+   ```python  
+   .element {  
+       padding: 10px; /* Memberikan padding sebesar 10px di semua sisi konten */  
+   }  
+   ```  
 4. **Jelaskan konsep *flex box* dan *grid layout* beserta kegunaannya\!**  
 * Flexbox (Flexible Box Layout)
 
@@ -717,409 +731,409 @@ Kegunaan:
 5. **Jelaskan bagaimana cara kamu mengimplementasikan *checklist* di atas secara *step-by-step* (bukan hanya sekadar mengikuti tutorial)\!**  
 * **Implementasi fungsi untuk menghapus dan mengedit *product*.**  
   Langkah pertama yang saya lakukan adalah menambahkan fungsi baru bernama `edit_product` yang menerima parameter request dan id pada berkas views.py di direktori main.  Setelah itu, saya menambahkan import pada berkas views.py sebagai berikut:  
-  \`\`\`python  
+  ```python  
   from django.shortcuts import .., reverse  
   from django.http import .., HttpResponseRedirect  
-  \`\`\`  
+  ```  
   Kemudian saya membuat berkas HTML baru bernama `edit_mood.html` pada subdirektori `main/templates`. Isi berkas tersebut dengan template berikut.  
-  \`\`\`python  
+  ```python  
   {% extends 'base.html' %}  
   {% load static %}  
   {% block meta %}  
-  \<title\>Edit Product\</title\>  
+  <title>Edit Product</title>  
   {% endblock meta %}  
     
   {% block content %}  
   {% include 'navbar.html' %}  
-  \<div class="flex flex-col min-h-screen bg-gray-100"\>  
-    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>  
-      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Edit Product Entry\</h1\>  
+  <div class="flex flex-col min-h-screen bg-gray-100">  
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">  
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Product Entry</h1>  
       
-      \<div class="bg-gray rounded-lg p-6 form-style"\>  
-        \<form method="POST" class="space-y-6"\>  
-            {% csrf\_token %}  
+      <div class="bg-gray rounded-lg p-6 form-style">  
+        <form method="POST" class="space-y-6">  
+            {% csrf_token %}  
             {% for field in form %}  
-                \<div class="flex flex-col"\>  
-                    \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>  
+                <div class="flex flex-col">  
+                    <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">  
                         {{ field.label }}  
-                    \</label\>  
-                    \<div class="w-full text-black"\>  
+                    </label>  
+                    <div class="w-full text-black">  
                         {{ field }}  
-                    \</div\>  
-                    {% if field.help\_text %}  
-                        \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>  
+                    </div>  
+                    {% if field.help_text %}  
+                        <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>  
                     {% endif %}  
                     {% for error in field.errors %}  
-                        \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>  
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>  
                     {% endfor %}  
-                \</div\>  
+                </div>  
             {% endfor %}  
-            \<div class="flex justify-center mt-6"\>  
-                \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>  
+            <div class="flex justify-center mt-6">  
+                <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">  
                     Edit Product Entry  
-                \</button\>  
-            \</div\>  
-        \</form\>  
-    \</div\>  
-    \</div\>  
-  \</div\>  
+                </button>  
+            </div>  
+        </form>  
+    </div>  
+    </div>  
+  </div>  
   {% endblock %}  
-  \`\`\`  
+  ```  
   Setelah membuat berkas tersebut, saya mengimpor fungsi `edit_product` yang sudah dibuat pada berkas urls.py dan menambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi. Lalu, pada berkas `main.html` yang berada pada subdirektori `main/templates` saya menambahkan potongan kode berikut sejajar dengan elemen `<td>` terakhir agar terlihat tombol *edit* pada setiap baris tabel.  
-  \`\`\`python  
+  ```python  
   ...  
-  \<tr\>  
+  <tr>  
       ...  
-      \<td\>  
-          \<a href="{% url 'main:edit\_product' product\_entry.pk %}"\>  
-              \<button\>  
+      <td>  
+          <a href="{% url 'main:edit_product' product_entry.pk %}">  
+              <button>  
                   Edit  
-              \</button\>  
-          \</a\>  
-      \</td\>  
-  \</tr\>  
+              </button>  
+          </a>  
+      </td>  
+  </tr>  
   ...  
-  \`\`\`  
+  ```  
   Untuk menghapus product, kurang lebih cara yang saya terapkan sama. Pertama, saya menambahkan fungsi baru bernama `delete_product` yang menerima parameter request dan id pada berkas views.py di direktori main untuk mengaus data.  Setelah itu, saya menambahkan import pada berkas views.py sebagai berikut:  
-  \`\`\`python  
+  ```python  
   from django.shortcuts import .., reverse  
   from django.http import .., HttpResponseRedirect  
-  \`\`\`  
+  ```  
   Kemudian saya membuat berkas HTML baru bernama `edit_mood.html` pada subdirektori `main/templates`. Isi berkas tersebut dengan template berikut.  
-  \`\`\`python  
-  def delete\_mood(request, id):  
-      \# Get mood berdasarkan id  
-      product \= ProductEntry.objects.get(pk \= id)  
-      \# Hapus mood  
+  ```python  
+  def delete_mood(request, id):  
+      # Get mood berdasarkan id  
+      product = ProductEntry.objects.get(pk = id)  
+      # Hapus mood  
       product.delete()  
-      \# Kembali ke halaman awal  
-      return HttpResponseRedirect(reverse('main:show\_main'))  
-  \`\`\`  
+      # Kembali ke halaman awal  
+      return HttpResponseRedirect(reverse('main:show_main'))  
+  ```  
   Setelah membuat berkas tersebut, saya mengimpor fungsi `delete_product` yang sudah dibuat pada berkas urls.py dan menambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi.   
     
 * **Kustomisasi desain pada *template* HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework**  
   Sebelum kustomisasi desain pada aplikasi, saya melakukan konfigurasi *Static Files* pada Aplikasi. Pada berkas setting.py, saya menambahkan *middleware* WhiteNoise.  
-  \`\`\`python  
+  ```python  
   ...  
-  MIDDLEWARE \= \[  
+  MIDDLEWARE = [  
       'django.middleware.security.SecurityMiddleware',  
-      'whitenoise.middleware.WhiteNoiseMiddleware', \#Tambahkan tepat di bawah SecurityMiddleware  
+      'whitenoise.middleware.WhiteNoiseMiddleware', #Tambahkan tepat di bawah SecurityMiddleware  
       ...  
-  \]  
+  ]  
   ...  
-  \`\`\`  
+  ```  
   Dengan menambahkan *middleware* WhiteNoise pada `settings.py`, Django dapat menangani *file* statis secara otomatis saat berada dalam mode produksi `(DEBUG=False)` tanpa perlu pengaturan yang rumit. Ini penting agar file statis tetap dapat diakses dalam proses deployment, karena secara default, ketika `DEBUG=False`, Django tidak memberikan akses ke *file* statis. Kemudian, pada berkas `settings.py`, saya memastikan variabel `STATIC_ROOT`, `STATICFILES_DIRS`, dan `STATIC_URL` dikonfigurasikan seperti ini:  
-  \`\`\`python  
+  ```python  
   ...  
-  STATIC\_URL \= '/static/'  
+  STATIC_URL = '/static/'  
   if DEBUG:  
-      STATICFILES\_DIRS \= \[  
-          BASE\_DIR / 'static' \# merujuk ke /static root project pada mode development  
-      \]  
+      STATICFILES_DIRS = [  
+          BASE_DIR / 'static' # merujuk ke /static root project pada mode development  
+      ]  
   else:  
-      STATIC\_ROOT \= BASE\_DIR / 'static' \# merujuk ke /static root project pada mode production  
+      STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production  
   ...  
-  \`\`\`  
+  ```  
   Selanjutnya, saya membuat berkas `global.css` di `/static/css` pada `root directory`. Lalu, saya menghubungkan `global.css` dan *script* Tailwind ke `base.html` dengan menambahkan berkas tersebut ke `base.html` `a`gar *style* CSS yang ditambahkan di `global.css` dapat digunakan dalam template Django. Modifikasi berkas `base.html` kamu seperti berikut:  
-  \`\`\`python  
+  ```python  
   {% load static %}  
-  \<\!DOCTYPE html\>  
-  \<html lang="en"\>  
-    \<head\>  
-      \<meta charset="UTF-8" /\>  
-      \<meta name="viewport" content="width=device-width, initial-scale=1.0" /\>  
+  <!DOCTYPE html>  
+  <html lang="en">  
+    <head>  
+      <meta charset="UTF-8" />  
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
       {% block meta %} {% endblock meta %}  
-      \<script src="https://cdn.tailwindcss.com"\>\</script\>  
-      \<link rel="stylesheet" href="{% static 'css/global.css' %}"/\>  
-    \</head\>  
-    \<body\>  
+      <script src="https://cdn.tailwindcss.com"></script>  
+      <link rel="stylesheet" href="{% static 'css/global.css' %}"/>  
+    </head>  
+    <body>  
       {% block content %} {% endblock content %}  
-    \</body\>  
-  \</html\>  
-  \`\`\`  
+    </body>  
+  </html>  
+  ```  
   * ***Styling*** **halaman Login** 
 
   Modifikasi `login.html` pada subdirektori `main/templates/` menjadi seperti berikut:
 
-  \`\`\`python
+  ```python
 
   {% extends 'base.html' %}
 
 
   {% block meta %}
 
-  \<title\>Login\</title\>
+  <title>Login</title>
 
   {% endblock meta %}
 
 
   {% block content %}
 
-  \<div class="min-h-screen flex items-center justify-center w-screen bg-teal-700 py-12 px-4 sm:px-6 lg:px-8"\>
+  <div class="min-h-screen flex items-center justify-center w-screen bg-teal-700 py-12 px-4 sm:px-6 lg:px-8">
 
-    \<div class="max-w-md w-full space-y-8"\>
+    <div class="max-w-md w-full space-y-8">
 
-      \<div\>
+      <div>
 
-        \<h2 class="mt-6 text-center text-white text-3xl font-extrabold text-gray-900"\>
+        <h2 class="mt-6 text-center text-white text-3xl font-extrabold text-gray-900">
 
           Login to your account
 
-        \</h2\>
+        </h2>
 
-      \</div\>
+      </div>
 
-      \<form class="mt-8 space-y-6" method="POST" action=""\>
+      <form class="mt-8 space-y-6" method="POST" action="">
 
-        {% csrf\_token %}
+        {% csrf_token %}
 
-        \<input type="hidden" name="remember" value="true"\>
+        <input type="hidden" name="remember" value="true">
 
-        \<div class="rounded-md shadow-sm \-space-y-px"\>
+        <div class="rounded-md shadow-sm -space-y-px">
 
-          \<div\>
+          <div>
 
-            \<label for="username" class="sr-only"\>Username\</label\>
+            <label for="username" class="sr-only">Username</label>
 
-            \<input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Username"\>
+            <input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Username">
 
-          \</div\>
+          </div>
 
-          \<div\>
+          <div>
 
-            \<label for="password" class="sr-only"\>Password\</label\>
+            <label for="password" class="sr-only">Password</label>
 
-            \<input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Password"\>
+            <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Password">
 
-          \</div\>
+          </div>
 
-        \</div\>
+        </div>
 
 
-        \<div\>
+        <div>
 
-          \<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900"\>
+          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900">
 
             Sign in
 
-          \</button\>
+          </button>
 
-        \</div\>
+        </div>
 
-      \</form\>
+      </form>
 
 
       {% if messages %}
 
-      \<div class="mt-4"\>
+      <div class="mt-4">
 
         {% for message in messages %}
 
-        {% if message.tags \== "success" %}
+        {% if message.tags == "success" %}
 
-              \<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert"\>
+              <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
 
-                  \<span class="block sm:inline"\>{{ message }}\</span\>
+                  <span class="block sm:inline">{{ message }}</span>
 
-              \</div\>
+              </div>
 
-          {% elif message.tags \== "error" %}
+          {% elif message.tags == "error" %}
 
-              \<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"\>
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
 
-                  \<span class="block sm:inline"\>{{ message }}\</span\>
+                  <span class="block sm:inline">{{ message }}</span>
 
-              \</div\>
+              </div>
 
           {% else %}
 
-              \<div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert"\>
+              <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
 
-                  \<span class="block sm:inline"\>{{ message }}\</span\>
+                  <span class="block sm:inline">{{ message }}</span>
 
-              \</div\>
+              </div>
 
           {% endif %}
 
         {% endfor %}
 
-      \</div\>
+      </div>
 
       {% endif %}
 
 
-      \<div class="text-center mt-4"\>
+      <div class="text-center mt-4">
 
-        \<p class="text-sm text-white"\>
+        <p class="text-sm text-white">
 
           Don't have an account yet?
 
-          \<a href="{% url 'main:register' %}" class="font-medium text-blue-900 hover:text-black"\>
+          <a href="{% url 'main:register' %}" class="font-medium text-blue-900 hover:text-black">
 
             Register Now
 
-          \</a\>
+          </a>
 
-        \</p\>
+        </p>
 
-      \</div\>
+      </div>
 
-    \</div\>
+    </div>
 
-  \</div\>
+  </div>
 
   {% endblock content %}
 
-  \`\`\`
+  ```
 
   * ***Styling*** **halaman Register**
 
   Modifikasi `register.html` pada subdirektori `main/templates/` menjadi seperti berikut:
 
-  \`\`\`python
+  ```python
 
   {% extends 'base.html' %}
 
 
   {% block meta %}
 
-  \<title\>Register\</title\>
+  <title>Register</title>
 
   {% endblock meta %}
 
 
   {% block content %}
 
-  \<div class="min-h-screen flex items-center justify-center bg-teal-700 py-12 px-4 sm:px-6 lg:px-8"\>
+  <div class="min-h-screen flex items-center justify-center bg-teal-700 py-12 px-4 sm:px-6 lg:px-8">
 
-    \<div class="max-w-md w-full space-y-8 form-style"\>
+    <div class="max-w-md w-full space-y-8 form-style">
 
-      \<div\>
+      <div>
 
-        \<h2 class="mt-6 text-center text-3xl font-extrabold text-white"\>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
 
           Create your account
 
-        \</h2\>
+        </h2>
 
-      \</div\>
+      </div>
 
-      \<form class="mt-8 space-y-6" method="POST"\>
+      <form class="mt-8 space-y-6" method="POST">
 
-        {% csrf\_token %}
+        {% csrf_token %}
 
-        \<input type="hidden" name="remember" value="true"\>
+        <input type="hidden" name="remember" value="true">
 
-        \<div class="rounded-md shadow-sm \-space-y-px"\>
+        <div class="rounded-md shadow-sm -space-y-px">
 
           {% for field in form %}
 
-            \<div class="{% if not forloop.first %}mt-4{% endif %}"\>
+            <div class="{% if not forloop.first %}mt-4{% endif %}">
 
-              \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-white"\>
+              <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-white">
 
                 {{ field.label }}
 
-              \</label\>
+              </label>
 
-              \<div class="relative"\>
+              <div class="relative">
 
                 {{ field }}
 
-                \<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"\>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
 
                   {% if field.errors %}
 
-                    \<svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"\>
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
 
-                      \<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /\>
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
 
-                    \</svg\>
+                    </svg>
 
                   {% endif %}
 
-                \</div\>
+                </div>
 
-              \</div\>
+              </div>
 
               {% if field.errors %}
 
                 {% for error in field.errors %}
 
-                  \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+                  <p class="mt-1 text-sm text-red-600">{{ error }}</p>
 
                 {% endfor %}
 
               {% endif %}
 
-            \</div\>
+            </div>
 
           {% endfor %}
 
-        \</div\>
+        </div>
 
 
-        \<div\>
+        <div>
 
-          \<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900"\>
+          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900">
 
             Register
 
-          \</button\>
+          </button>
 
-        \</div\>
+        </div>
 
-      \</form\>
+      </form>
 
 
       {% if messages %}
 
-      \<div class="mt-4"\>
+      <div class="mt-4">
 
         {% for message in messages %}
 
-        \<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"\>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
 
-          \<span class="block sm:inline"\>{{ message }}\</span\>
+          <span class="block sm:inline">{{ message }}</span>
 
-        \</div\>
+        </div>
 
         {% endfor %}
 
-      \</div\>
+      </div>
 
       {% endif %}
 
 
-      \<div class="text-center mt-4"\>
+      <div class="text-center mt-4">
 
-        \<p class="text-sm text-white"\>
+        <p class="text-sm text-white">
 
           Already have an account?
 
-          \<a href="{% url 'main:login' %}" class="font-medium text-blue-900 hover:text-blue-950"\>
+          <a href="{% url 'main:login' %}" class="font-medium text-blue-900 hover:text-blue-950">
 
             Login here
 
-          \</a\>
+          </a>
 
-        \</p\>
+        </p>
 
-      \</div\>
+      </div>
 
-    \</div\>
+    </div>
 
-  \</div\>
+  </div>
 
   {% endblock content %}
 
-  \`\`\`
+  ```
 
   * ***Styling*** **halaman Create Mood Entry**
 
   Modifikasi `create_product_entry.html` pada subdirektori `main/templates/` menjadi seperti berikut:
 
-  \`\`\`python
+  ```python
 
   {% extends 'base.html' %}
 
@@ -1127,7 +1141,7 @@ Kegunaan:
 
   {% block meta %}
 
-  \<title\>Create Product\</title\>
+  <title>Create Product</title>
 
   {% endblock meta %}
 
@@ -1137,156 +1151,156 @@ Kegunaan:
   {% include 'navbar.html' %}
 
 
-  \<div class="flex flex-col min-h-screen bg-gray-100"\>
+  <div class="flex flex-col min-h-screen bg-gray-100">
 
-    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
 
-      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Create Product Entry\</h1\>
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Create Product Entry</h1>
 
     
 
-      \<div class="bg-white shadow-md rounded-lg p-6 form-style"\>
+      <div class="bg-white shadow-md rounded-lg p-6 form-style">
 
-        \<form method="POST" class="space-y-6"\>
+        <form method="POST" class="space-y-6">
 
-          {% csrf\_token %}
+          {% csrf_token %}
 
           {% for field in form %}
 
-            \<div class="flex flex-col"\>
+            <div class="flex flex-col">
 
-              \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>
+              <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
 
                 {{ field.label }}
 
-              \</label\>
+              </label>
 
-              \<div class="w-full text-black"\>
+              <div class="w-full text-black">
 
                 {{ field }}
 
-              \</div\>
+              </div>
 
-              {% if field.help\_text %}
+              {% if field.help_text %}
 
-                \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>
+                <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
 
               {% endif %}
 
               {% for error in field.errors %}
 
-                \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
 
               {% endfor %}
 
-            \</div\>
+            </div>
 
           {% endfor %}
 
-          \<div class="flex justify-center mt-6"\>
+          <div class="flex justify-center mt-6">
 
-            \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>
+            <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
 
               Create Product Entry
 
-            \</button\>
+            </button>
 
-          \</div\>
+          </div>
 
-        \</form\>
+        </form>
 
-      \</div\>
+      </div>
 
-    \</div\>
+    </div>
 
-  \</div\>
+  </div>
 
 
   {% endblock %}
 
-  \`\`\`
+  ```
 
   * *Styling* halaman Home
 
   Saya membuat berkas `card_info.html` di directory `main/templates`, lalu mengisi berkas tersebut dengan kode html seperti berikut:
 
-  \`\`\`python
+  ```python
 
-  \<div class="bg-teal-700 rounded-xl overflow-hidden border-2 border-teal-700"\>
+  <div class="bg-teal-700 rounded-xl overflow-hidden border-2 border-teal-700">
 
-      \<div class="p-4"\>
+      <div class="p-4">
 
-        \<h5 class="text-lg font-semibold text-white"\>{{ title }}\</h5\>
+        <h5 class="text-lg font-semibold text-white">{{ title }}</h5>
 
-        \<p class="text-white"\>{{ value }}\</p\>
+        <p class="text-white">{{ value }}</p>
 
-      \</div\>
+      </div>
 
-  \</div\>
+  </div>
 
-  \`\`\`
+  ```
 
   Kemudian, saya membuat berkas `card_product.html` di directory `main/templates`, lalu mengisi berkas tersebut dengan kode html seperti berikut:
 
-  \`\`\`python
+  ```python
 
-  \<div class="relative break-inside-avoid"\>
+  <div class="relative break-inside-avoid">
 
-      \<div class="relative top-5 bg-white hover:bg-gray-200 shadow-md rounded-lg mb-6 break-inside-avoid flex flex-col border border-gray-200"\>
+      <div class="relative top-5 bg-white hover:bg-gray-200 shadow-md rounded-lg mb-6 break-inside-avoid flex flex-col border border-gray-200">
 
-        \<div class="p-4"\>
+        <div class="p-4">
 
-          \<h2 class="text-lg font-bold mt-1 text-gray-800 mb-2"\>{{product\_entry.name}}\</h2\>
+          <h2 class="text-lg font-bold mt-1 text-gray-800 mb-2">{{product_entry.name}}</h2>
 
-          \<p class="font-semibold text-black mb-2"\>Description\</p\> 
+          <p class="font-semibold text-black mb-2">Description</p> 
 
-          \<p class="text-gray-700 mb-2"\>
+          <p class="text-gray-700 mb-2">
 
-            \<span class="bg-\[linear-gradient(to\_bottom,transparent\_0%,transparent\_calc(100%\_-\_1px),\#CDC1FF\_calc(100%\_-\_1px))\] bg-\[length:100%\_1.5rem\] pb-1"\>{{product\_entry.description}}\</span\>
+            <span class="bg-[linear-gradient(to_bottom,transparent_0%,transparent_calc(100%_-_1px),#CDC1FF_calc(100%_-_1px))] bg-[length:100%_1.5rem] pb-1">{{product_entry.description}}</span>
 
-          \</p\>
+          </p>
 
-          \<div class="mt-4"\>
+          <div class="mt-4">
 
-            \<p class="text-lg font-bold text-indigo-600 mt-2"\>IDR {{product\_entry.price}}\</p\>
+            <p class="text-lg font-bold text-indigo-600 mt-2">IDR {{product_entry.price}}</p>
 
-          \</div\>
+          </div>
 
-        \</div\>
+        </div>
 
-      \</div\>
+      </div>
 
-      \<div class="absolute flex space-x-1 \-bottom-9 right-0 transform translate-x-2"\>
+      <div class="absolute flex space-x-1 -bottom-9 right-0 transform translate-x-2">
 
-        \<a href="{% url 'main:edit\_product' product\_entry.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md"\>
+        <a href="{% url 'main:edit_product' product_entry.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md">
 
-          \<svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor"\>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
 
-            \<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /\>
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
 
-          \</svg\>
+          </svg>
 
-        \</a\>
+        </a>
 
-        \<a href="{% url 'main:delete\_product' product\_entry.pk %}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md"\>
+        <a href="{% url 'main:delete_product' product_entry.pk %}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
 
-          \<svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor"\>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor">
 
-            \<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /\>
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
 
-          \</svg\>
+          </svg>
 
-        \</a\>
+        </a>
 
-      \</div\>
+      </div>
 
-    \</div\>
+    </div>
 
-  \`\`\`
+  ```
 
   Selanjutnya, saya memilih satu foto atau *icon* sedih dari internet dan dinamakan `sedih-banget.png`. Setelah itu, saya menambahkan foto `sedih-banget.png` tadi ke direktori `static/image` yang berada di `root project`. Setelah semua berkas selesai dibuat, saya menggunakan `card_info.html, card_mood.html, dan sedih-banget.png` tersebut ke template `main.html`. Pada *directory* `main/templates`, modifikasi main.html seperti ini:
 
-  \`\`\`python
+  ```python
 
   {% extends 'base.html' %}
 
@@ -1295,7 +1309,7 @@ Kegunaan:
 
   {% block meta %}
 
-  \<title\>Shopeeta\</title\>
+  <title>Shopeeta</title>
 
   {% endblock meta %}
 
@@ -1303,91 +1317,91 @@ Kegunaan:
 
   {% include 'navbar.html' %}
 
-  \<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col"\>
+  <div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
 
-    \<div class="p-2 mb-6 relative"\>
+    <div class="p-2 mb-6 relative">
 
-      \<div class="relative grid grid-cols-1 z-30 md:grid-cols-3 gap-8"\>
+      <div class="relative grid grid-cols-1 z-30 md:grid-cols-3 gap-8">
 
-        {% include "card\_info.html" with title='NPM' value=npm %}
+        {% include "card_info.html" with title='NPM' value=npm %}
 
-        {% include "card\_info.html" with title='Name' value=name %}
+        {% include "card_info.html" with title='Name' value=name %}
 
-        {% include "card\_info.html" with title='Class' value=class %}
+        {% include "card_info.html" with title='Class' value=class %}
 
-      \</div\>
+      </div>
 
-      \<div class="w-full px-6  absolute top-\[44px\] left-0 z-20 hidden md:flex"\>
+      <div class="w-full px-6  absolute top-[44px] left-0 z-20 hidden md:flex">
 
-        \<div class="w-full min-h-4 bg-indigo-700"\>
+        <div class="w-full min-h-4 bg-indigo-700">
 
-        \</div\>
+        </div>
 
-      \</div\>
+      </div>
 
-      \<div class="h-full w-full py-6  absolute top-0 left-0 z-20 md:hidden flex "\>
+      <div class="h-full w-full py-6  absolute top-0 left-0 z-20 md:hidden flex ">
 
-        \<div class="h-full min-w-4 bg-indigo-700 mx-auto"\>
+        <div class="h-full min-w-4 bg-indigo-700 mx-auto">
 
-        \</div\>
+        </div>
 
-      \</div\>
+      </div>
 
-  \</div\>
+  </div>
 
-      \<div class="px-3 mb-4"\>
+      <div class="px-3 mb-4">
 
-        \<h1 class="font-bold text-blue-900 text-center"\>Last Login: {{last\_login}}\</h1\>
+        <h1 class="font-bold text-blue-900 text-center">Last Login: {{last_login}}</h1>
 
-      \</div\>
+      </div>
 
-      \<div class="flex justify-end mb-6"\>
+      <div class="flex justify-end mb-6">
 
-          \<a href="{% url 'main:create\_product\_entry' %}" class="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"\>
+          <a href="{% url 'main:create_product_entry' %}" class="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
 
               Add New Product Entry
 
-          \</a\>
+          </a>
 
-      \</div\>
+      </div>
 
       
 
-      {% if not product\_entries %}
+      {% if not product_entries %}
 
-      \<div class="flex flex-col items-center justify-center min-h-\[24rem\] p-6"\>
+      <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
 
-          \<img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/\>
+          <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
 
-          \<p class="text-center text-gray-600 mt-4"\>Belum ada produk yang terdaftar.\</p\>
+          <p class="text-center text-gray-600 mt-4">Belum ada produk yang terdaftar.</p>
 
-      \</div\>
+      </div>
 
       {% else %}
 
-      \<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"\>
+      <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
 
-          {% for product\_entry in product\_entries %}
+          {% for product_entry in product_entries %}
 
-              {% include 'card\_product.html' with product\_entry=product\_entry %}
+              {% include 'card_product.html' with product_entry=product_entry %}
 
           {% endfor %}
 
-      \</div\>
+      </div>
 
       {% endif %}
 
-  \</div\>
+  </div>
 
   {% endblock content %}
 
-  \`\`\`
+  ```
 
   * *Styling* halaman Edit Product
 
   Membuat berkas `edit_product.html` pada subdirektori `main/templates` dengan potongan kode seperti berikut:
 
-  \`\`\`python
+  ```python
 
   {% extends 'base.html' %}
 
@@ -1395,7 +1409,7 @@ Kegunaan:
 
   {% block meta %}
 
-  \<title\>Edit Product\</title\>
+  <title>Edit Product</title>
 
   {% endblock meta %}
 
@@ -1404,233 +1418,232 @@ Kegunaan:
 
   {% include 'navbar.html' %}
 
-  \<div class="flex flex-col min-h-screen bg-gray-100"\>
+  <div class="flex flex-col min-h-screen bg-gray-100">
 
-    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
 
-      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Edit Product Entry\</h1\>
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Product Entry</h1>
 
     
 
-      \<div class="bg-gray rounded-lg p-6 form-style"\>
+      <div class="bg-gray rounded-lg p-6 form-style">
 
-        \<form method="POST" class="space-y-6"\>
+        <form method="POST" class="space-y-6">
 
-            {% csrf\_token %}
+            {% csrf_token %}
 
             {% for field in form %}
 
-                \<div class="flex flex-col"\>
+                <div class="flex flex-col">
 
-                    \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>
+                    <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
 
                         {{ field.label }}
 
-                    \</label\>
+                    </label>
 
-                    \<div class="w-full text-black"\>
+                    <div class="w-full text-black">
 
                         {{ field }}
 
-                    \</div\>
+                    </div>
 
-                    {% if field.help\_text %}
+                    {% if field.help_text %}
 
-                        \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>
+                        <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
 
                     {% endif %}
 
                     {% for error in field.errors %}
 
-                        \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
 
                     {% endfor %}
 
-                \</div\>
+                </div>
 
             {% endfor %}
 
-            \<div class="flex justify-center mt-6"\>
+            <div class="flex justify-center mt-6">
 
-                \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>
+                <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
 
                     Edit Product Entry
 
-                \</button\>
+                </button>
 
-            \</div\>
+            </div>
 
-        \</form\>
+        </form>
 
-    \</div\>
+    </div>
 
-    \</div\>
+    </div>
 
-  \</div\>
+  </div>
 
   {% endblock %}
 
-  \`\`\`
+  ```
 
   * **Membuat *navigation bar* (*navbar*) untuk fitur-fitur pada aplikasi yang *responsive* terhadap perbedaan ukuran *device*, khususnya *mobile* dan *desktop*.**
 
   Saya membuat berkas HTML baru dengan nama `navbar.html` pada folder `templates/` di `root directory`. Isi dari `navbar.html` adalah sebagai berikut:
 
-  \`\`\`python
+  ```python
 
-  \<\!DOCTYPE html\>
+  <!DOCTYPE html>
 
-  \<html lang="en"\>
+  <html lang="en">
 
-  \<head\>
+  <head>
 
-      \<meta charset="UTF-8"\>
+      <meta charset="UTF-8">
 
-      \<meta name="viewport" content="width=device-width, initial-scale=1.0"\>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      \<title\>Responsive Navbar\</title\>
+      <title>Responsive Navbar</title>
 
-      \<script src="https://cdn.tailwindcss.com"\>\</script\>
+      <script src="https://cdn.tailwindcss.com"></script>
 
-  \</head\>
+  </head>
 
-  \<body class="bg-teal-700 text-white"\>
+  <body class="bg-teal-700 text-white">
 
 
-      \<\!-- Navbar \--\>
+      <!-- Navbar -->
 
-      \<nav class="bg-teal-700 p-4"\>
+      <nav class="bg-teal-700 p-4">
 
-          \<div class="container mx-auto flex justify-between items-center"\>
+          <div class="container mx-auto flex justify-between items-center">
 
-              \<\!-- Logo \--\>
+              <!-- Logo -->
 
-              \<div class="text-2xl font-bold"\>
+              <div class="text-2xl font-bold">
 
                   Shopeeta
 
-              \</div\>
+              </div>
 
 
-              \<\!-- Mobile hamburger menu button \--\>
+              <!-- Mobile hamburger menu button -->
 
-              \<div class="block lg:hidden"\>
+              <div class="block lg:hidden">
 
-                  \<button id="hamburger" class="text-gray-400 focus:outline-none"\>
+                  <button id="hamburger" class="text-gray-400 focus:outline-none">
 
-                      \<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"\>
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
-                          \<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"\>\</path\>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
 
-                      \</svg\>
+                      </svg>
 
-                  \</button\>
+                  </button>
 
-              \</div\>
-
-
-              \<\!-- Links (hidden on mobile) \--\>
-
-              \<div class="hidden lg:flex justify-between items-center space-x-6"\>
-
-                \<a href="\#" class="hover:text-gray-400"\>Home\</a\>
-
-                \<a href="\#" class="hover:text-gray-400"\>Products\</a\>
-
-                \<a href="\#" class="hover:text-gray-400"\>Categories\</a\>
-
-                \<a href="\#" class="hover:text-gray-400"\>Cart\</a\>
-
-              \</div\>
+              </div>
 
 
-              \<\!-- Authentication Links \--\>
+              <!-- Links (hidden on mobile) -->
 
-              \<div class="hidden lg:flex items-center"\>
+              <div class="hidden lg:flex justify-between items-center space-x-6">
 
-                {% if user.is\_authenticated %}
+                <a href="#" class="hover:text-gray-400">Home</a>
 
-                  \<span class="text-gray-300 mr-4"\>Welcome, {{ user.username }}\</span\>
+                <a href="#" class="hover:text-gray-400">Products</a>
 
-                  \<a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"\>
+                <a href="#" class="hover:text-gray-400">Categories</a>
+
+                <a href="#" class="hover:text-gray-400">Cart</a>
+
+              </div>
+
+
+              <!-- Authentication Links -->
+
+              <div class="hidden lg:flex items-center">
+
+                {% if user.is_authenticated %}
+
+                  <span class="text-gray-300 mr-4">Welcome, {{ user.username }}</span>
+
+                  <a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
 
                     Logout
 
-                  \</a\>
+                  </a>
 
                 {% else %}
 
-                  \<a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2"\>
+                  <a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
 
                     Login
 
-                  \</a\>
+                  </a>
 
-                  \<a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300"\>
+                  <a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
 
                     Register
 
-                  \</a\>
+                  </a>
 
                 {% endif %}
 
-              \</div\>
+              </div>
 
-          \</div\>
+          </div>
 
 
-          \<\!-- Mobile Menu \--\>
+          <!-- Mobile Menu -->
 
-          \<div id="mobileMenu" class="hidden lg:hidden"\>
+          <div id="mobileMenu" class="hidden lg:hidden">
 
-              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Home\</a\>
+              <a href="#" class="block py-2 px-4 hover:bg-gray-700">Home</a>
 
-              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Products\</a\>
+              <a href="#" class="block py-2 px-4 hover:bg-gray-700">Products</a>
 
-              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Categories\</a\>
+              <a href="#" class="block py-2 px-4 hover:bg-gray-700">Categories</a>
 
-              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Cart\</a\>
+              <a href="#" class="block py-2 px-4 hover:bg-gray-700">Cart</a>
 
-              {% if user.is\_authenticated %}
+              {% if user.is_authenticated %}
 
-                \<span class="block py-2 px-4"\>Welcome, {{ user.username }}\</span\>
+                <span class="block py-2 px-4">Welcome, {{ user.username }}</span>
 
-                \<a href="{% url 'main:logout' %}" class="block bg-red-500 py-2 px-4 text-center hover:bg-red-600"\>Logout\</a\>
+                <a href="{% url 'main:logout' %}" class="block bg-red-500 py-2 px-4 text-center hover:bg-red-600">Logout</a>
 
               {% else %}
 
-                \<a href="{% url 'main:login' %}" class="block bg-blue-500 py-2 px-4 text-center hover:bg-blue-600"\>Login\</a\>
+                <a href="{% url 'main:login' %}" class="block bg-blue-500 py-2 px-4 text-center hover:bg-blue-600">Login</a>
 
-                \<a href="{% url 'main:register' %}" class="block bg-green-500 py-2 px-4 text-center hover:bg-green-600"\>Register\</a\>
+                <a href="{% url 'main:register' %}" class="block bg-green-500 py-2 px-4 text-center hover:bg-green-600">Register</a>
 
               {% endif %}
 
-          \</div\>
+          </div>
 
-      \</nav\>
-
-
-      \<script\>
-
-          const hamburger \= document.getElementById('hamburger');
-
-          const mobileMenu \= document.getElementById('mobileMenu');
+      </nav>
 
 
-          hamburger.addEventListener('click', () \=\> {
+      <script>
+
+          const hamburger = document.getElementById('hamburger');
+
+          const mobileMenu = document.getElementById('mobileMenu');
+
+
+          hamburger.addEventListener('click', () => {
 
               mobileMenu.classList.toggle('hidden');
 
           });
 
-      \</script\>
+      </script>
 
 
-  \</body\>
+  </body>
+  </html>
 
-  \</html\>
-
-  \`\`\`
+  ```
 
 
   

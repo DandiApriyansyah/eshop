@@ -81,85 +81,79 @@ Model pada Django disebut sebagai ORM (Object-Relational Mapping) karena Django 
 5. **Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).**  
 * **Membuat input form untuk menambahkan objek model pada app sebelumnya**  
   Langkah pertama yang saya lakukan adalah membuat berkas baru bernama `form.py` pada direktori `main` untuk membuat struktur form yang dapat menambahkan data Product Entry baru. Kemudian, saya mengisi berkas tersebut dengan kode sebagai berikut:  
-  ```python
-  from django.forms import ModelForm  
-  from main.models import ProductEntry  
+  `from django.forms import ModelForm`  
+  `from main.models import ProductEntry`  
     
-  class ProductEntryForm(ModelForm):`  
-      class Meta:  
-          model = ProductEntry  
-          fields = ["name", "price"]  
-  ```  
+  `class ProductEntryForm(ModelForm):`  
+      `class Meta:`  
+          `model = ProductEntry`  
+          `fields = ["name", "price"]`  
+    
   Setelah itu, saya memodifikasi berkas `views.py` pada direktori main dengan mengimpor beberapa fungsi:  
-  ```python
-  from django.shortcuts import render, redirect     
-  from main.forms import ProductEntryForm  
-  from main.models import ProductEntry
-  ```  
+  `from django.shortcuts import render, redirect`     
+  `from main.forms import ProductEntryForm`  
+  `from main.models import ProductEntry`  
     
   Selanjutnya, saya membuat fungsi baru bernama `create_produt_entry` yang menerima parameter *request*. Fungsi tersebut saya isi dengan kode di bawah ini untuk menghasilkan form yang dapat menambahkan data *Product Entry* secara otomatis ketika data di-submit dari form.  
-  ```python
-  def create_product_entry(request):  
-      form = ProductEntryForm(request.POST or None)  
+  `def create_product_entry(request):`  
+      `form = ProductEntryForm(request.POST or None)`  
     
-      if form.is_valid() and request.method == "POST":  
-          form.save()  
-          return redirect('main:show_main')  
+      `if form.is_valid() and request.method == "POST":`  
+          `form.save()`  
+          `return redirect('main:show_main')`  
     
-      context = {'form': form}  
-      return render(request, "create_product_entry.html", context)  
-    ```
+      `context = {'form': form}`  
+      `return render(request, "create_product_entry.html", context)`  
+    
   Kemudian, saya menambahkan `'product_entries': product_entries` di dalam variabel context yang berada di fungsi `show_main`. Pada berkas `urls.py`, saya melakukan import fungsi dari `main.views` dan menambahkan rute URL `path('create-product-entry',create_product_entry,name='create_product_entry'),` di variabel `urlpatterns` pada `views.py` di direktori main untuk mengakses fungsi yang sudah di-import pada poin sebelumnya. Selanjutnya, saya membuat berkas HTML baru dengan nama `create_product_entry.html` pada direktori `main/templates`. Isi berkas `create_product_entry.html` adalah kode berikut:  
-  ```python
-  {% extends 'base.html' %}   
-  {% block content %}  
-  <h1>Add New Product Entry</h1>  
+  `{% extends 'base.html' %}`   
+  `{% block content %}`  
+  `<h1>Add New Product Entry</h1>`  
     
-  <form method="POST">  
-    {% csrf_token %}  
-    <table>  
-      {{ form.as_table }}  
-      <tr>  
-        <td></td>  
-        <td>  
-          <input type="submit" value="Add Product Entry" />  
-        </td>  
-      </tr>  
-    </table>  
-  </form>  
+  `<form method="POST">`  
+    `{% csrf_token %}`  
+    `<table>`  
+      `{{ form.as_table }}`  
+      `<tr>`  
+        `<td></td>`  
+        `<td>`  
+          `<input type="submit" value="Add Product Entry" />`  
+        `</td>`  
+      `</tr>`  
+    `</table>`  
+  `</form>`  
     
-  {% endblock %}  
-  ```  
+  `{% endblock %}`  
+    
   Lalu, saya menambahkan kode di bawah ini pada berkas `main.html` di dalam `{% block content %}` untuk menampilkan data produk dalam bentuk tabel serta tombol `Add New Product Entry` yang akan redirect ke halaman form. Kode yang saya tambahkan adalah sebagai berikut:  
-  ```python
-  {% if not product_entries %}  
-  <p>Belum ada data produk pada Shopeeta.</p>  
-  {% else %}  
-  <table>  
-    <tr>  
-      <th>Product Name</th>  
-      <th>Time</th>  
-      <th>Price</th>  
-    </tr>  
+  `{% if not product_entries %}`  
+  `<p>Belum ada data produk pada Shopeeta.</p>`  
+  `{% else %}`  
+  `<table>`  
+    `<tr>`  
+      `<th>Product Name</th>`  
+      `<th>Time</th>`  
+      `<th>Price</th>`  
+    `</tr>`  
     
-    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini   
-    {% endcomment %}   
-    {% for product_entry in product_entries %}  
-    <tr>  
-      <td>{{product_entry.name}}</td>  
-      <td>{{product_entry.time}}</td>  
-      <td>{{product_entry.price}}</td>  
-    </tr>  
-    {% endfor %}  
-  </table>  
-  {% endif %}  
+    `{% comment %} Berikut cara memperlihatkan data produk di bawah baris ini`   
+    `{% endcomment %}`   
+    `{% for product_entry in product_entries %}`  
+    `<tr>`  
+      `<td>{{product_entry.name}}</td>`  
+      `<td>{{product_entry.time}}</td>`  
+      `<td>{{product_entry.price}}</td>`  
+    `</tr>`  
+    `{% endfor %}`  
+  `</table>`  
+  `{% endif %}`  
     
-  <br />  
+  `<br />`  
     
-  <a href="{% url 'main:create_product_entry' %}">  
-    <button>Add New Product Entry</button>  
-  </a>  
-  ```  
+  `<a href="{% url 'main:create_product_entry' %}">`  
+    `<button>Add New Product Entry</button>`  
+  `</a>`  
+    
 * **Menambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID**  
   Pertama-tama, saya menambahkan import `HttpResponse` dan `Serializer` pada bagian paling atas pada berkas views.py yang ada pada direktori main. Setelah itu, saya membuat 2 fungsi baru yang menerima parameter *request* dengan nama `show_xml` dan `show_json`. Fungsi show\_xml digunakan untuk mengembalikan data dalam bentuk XML, sedangkan fungsi `show_json` untuk mengembalikan data dalam bentuk JSON. Di dalam masing-masing fungsi tersebut saya membuat variabel yang menyimpan hasil *query* dari seluruh data yang ada pada *Product Entry*.  
   `data = ProductEntry.objects.all()`   
@@ -184,23 +178,19 @@ Model pada Django disebut sebagai ORM (Object-Relational Mapping) karena Django 
 
 * http://localhost:8000/xml
 
-![Screenshot (49)](https://github.com/user-attachments/assets/49dc3a95-d4e1-42c0-ae4d-bfad305820f1)
-
+![][image2]
 
 * http://localhost:8000/json
 
-![Screenshot (50)](https://github.com/user-attachments/assets/f67ae7da-e31c-41e1-802b-d1568690cfce)
-
+![][image3]
 
 * http://localhost:8000/xml/8616b925-3bf7-4354-9cbf-d418ae2a715f
 
-![Screenshot (51)](https://github.com/user-attachments/assets/75a039de-3d8b-4358-96ea-2d5aed60c6a9)
-
+![][image4]
 
 *  http://localhost:8000/json/8616b925-3bf7-4354-9cbf-d418ae2a715f
 
-![Screenshot (52)](https://github.com/user-attachments/assets/6bfc24d7-83ce-4666-b9d4-af0c7abc7136)
-
+![][image5]
 
 # Tugas Individu 4
 
@@ -225,56 +215,48 @@ Model pada Django disebut sebagai ORM (Object-Relational Mapping) karena Django 
    Berikut ini adalah penjelasan cara kerja salah satu jenis relasi penghubungan model `Product` dengan `User`, yaitu ***ForeignKey*** (relasi satu-ke-banyak):  
 1) Mendefinisikan Model `Product` dan `User`  
    Django memiliki model `User` yang telah disediakan oleh modul `django.contrib.auth.models`. Model ini bisa dihubungkan ke model lain, seperti `Product`, yang kita buat sendiri. Misalkan, setiap produk (`Product`) memiliki pemilik atau pembuat produk yang merupakan pengguna (`User`). Berikut potongan kode untuk mengimpor modul tersebut.  
-   ```python
-   ...  
-   from django.contrib.auth.models import User  
-   ...
-   ```  
-3) Menghubungkan Model `Product` dengan `User` menggunakan `ForeignKey` Untuk menghubungkan model `Product` ke `User`, kita dapat menggunakan `ForeignKey` di model `Product`. Ini menciptakan relasi **satu-ke-banyak** di mana satu `User` dapat memiliki banyak `Product`, tetapi setiap `Product` hanya dimiliki oleh satu `User`. Berikut adalah contoh kode yang menunjukkan bagaimana cara kerja penghubungan tersebut pada berkas `models.py` di subdirektori `main`:  
-   ```python
-   from django.db import models  
-   from django.contrib.auth.models import User  
-   import uuid  
-
-   class ProductEntry(models.Model):  
-   	   user = models.ForeignKey(User, on_delete=models.CASCADE)  
-   	   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
-   	   name = models.CharField(max_length=255)  
-   	   price = models.IntegerField()  
-   	   description = models.TextField()  
-   	   time = models.DateField(auto_now_add=True)
-   ```  
+   `...`  
+   `from django.contrib.auth.models import User`  
+   `...`  
+2) Menghubungkan Model `Product` dengan `User` menggunakan `ForeignKey` Untuk menghubungkan model `Product` ke `User`, kita dapat menggunakan `ForeignKey` di model `Product`. Ini menciptakan relasi **satu-ke-banyak** di mana satu `User` dapat memiliki banyak `Product`, tetapi setiap `Product` hanya dimiliki oleh satu `User`. Berikut adalah contoh kode yang menunjukkan bagaimana cara kerja penghubungan tersebut pada berkas `models.py` di subdirektori `main`:  
+   `from django.db import models`  
+   `from django.contrib.auth.models import User`  
+   `import uuid`  
+   `class ProductEntry(models.Model):`  
+   	`user = models.ForeignKey(User, on_delete=models.CASCADE)`  
+   	`id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)`  
+   	`name = models.CharField(max_length=255)`  
+   	`price = models.IntegerField()`  
+   	`description = models.TextField()`  
+   	`time = models.DateField(auto_now_add=True)`  
 * **Penjelasan kode:**  
   `ForeignKey(User, on_delete=models.CASCADE)` yang digunakan pada kode di atas berfungsi untuk menghubungkan `model Product` dengan `model User.` Kemudian, potongan kode `on_delete=models.CASCADE` berarti jika pengguna `(User)` dihapus, semua produk `(Product)` yang dimiliki pengguna tersebut juga akan dihapus.  
 3) Cara Kerja di Database  
    Setelah kita mendefinisikan relasi ini, Django akan membuat kolom tambahan (`user`) di tabel `Product` yang menyimpan referensi ke `User`. Kolom ini akan berisi ID dari `User` yang menjadi pemilik produk.  
 4) Modifikasi berkas `views.py`  
    Pada berkas `views.py` yang ada pada subdirektori main, lakukan modifikasi kode pada fungsi `create_product_entry` menjadi sebagai berikut:  
-   ```python
-   def create_product_entry(request):  
-       form = ProductEntryForm(request.POST or None)  
-       if form.is_valid() and request.method == "POST":  
-   	   product_entry = form.save(commit=False)  
-   	   product_entry.user = request.user  
-   	   form.save()  
-   	   return redirect('main:show_main')  
-       context = {'form': form}
+   `def create_product_entry(request):`  
+       `form = ProductEntryForm(request.POST or None)`  
+       `if form.is_valid() and request.method == "POST":`  
+   	   `product_entry = form.save(commit=False)`  
+   	   `product_entry.user = request.user`  
+   	   `form.save()`  
+   	   `return redirect('main:show_main')`  
+       `context = {'form': form}`
 
-       return render(request, "create_product_entry.html", context)
-   ```  
+       `return render(request, "create_product_entry.html", context)`  
    **Penjelasan Kode:**  
    Parameter `commit=False` yang digunakan pada potongan kode diatas berguna untuk mencegah Django agar tidak langsung menyimpan objek yang telah dibuat dari `form` langsung ke database. Hal tersebut memungkinkan kita untuk memodifikasi terlebih dahulu objek tersebut sebelum disimpan ke database. Pada kasus ini, kita akan mengisi field `user` dengan objek `User` dari *return value* `request.user`. Penggunaan `request.user` bertujuan agar ketika pengguna menambahkan produk baru, produk tersebut sudah terotorisasi dengan pengguna yang sedang *login*.   
 5) Melakukan filterisasi produk berdasarkan pengguna  
    Ubahlah *value* dari `product_entries` dan `context` pada fungsi `show_main` menjadi seperti berikut.  
-   ```python
-   def show_main(request):  
-       product_entries = ProductEntry.objects.filter(user=request.user)  
-       context = {  
-           'name': request.user.username,  
-           ...  
-       }  
-   ...  
-   ```  
+   `def show_main(request):`  
+       `product_entries = ProductEntry.objects.filter(user=request.user)`  
+       `context = {`  
+           `'name': request.user.username,`  
+            `...`  
+       `}`  
+   `...`  
+     
    **Penjelasan kode:**  
    Kode tersebut berfungsi untuk menampilkan objek `Product Entry` yang terkait dengan pengguna yang sedang *login*. Hal ini dilakukan dengan memfilter seluruh objek dan hanya mengambil Product Entry di mana field `user` diisi dengan objek `User` yang sama dengan pengguna yang sedang *login*.  
 3. **Apa perbedaan antara *authentication* dan *authorization*, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.**  
@@ -332,61 +314,94 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   * Fungsi registrasi
 
   Langkah pertama yang saya lakukan adalah mengaktifkan virtual environment pada terminal. Setelah itu, saya menambahkan *import* `UserCreationForm` dan `messages` pada bagian paling atas di berkas `views.py` yang ada pada subdirektori main. 
-  ```python
-    from django.contrib.auth.forms import UserCreationForm
-    from django.contrib import messages
-  ```
+
+  `from django.contrib.auth.forms import UserCreationForm`
+
+  `from django.contrib import messages`
+
   Kemudian, saya menambahkan fungsi baru yaitu fungsi `register` ke dalam `views.py` untuk menghasilkan formulir registrasi secara otomatis dan menghasilkan akun pengguna ketika data di-*submit* dari form.
-  ```python
-    def register(request):
-        form = UserCreationForm()
-  
-        if request.method == "POST":
-            form = UserCreationForm(request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Your account has been successfully created!')
-  
-                return redirect('main:login')
-  
-        context = {'form':form}
-        return render(request, 'register.html', context)
-  ```
+
+  `def register(request):`
+
+      `form = UserCreationForm()`
+
+
+      `if request.method == "POST":`
+
+          `form = UserCreationForm(request.POST)`
+
+          `if form.is_valid():`
+
+              `form.save()`
+
+              `messages.success(request, 'Your account has been successfully created!')`
+
+              `return redirect('main:login')`
+
+      `context = {'form':form}`
+
+      `return render(request, 'register.html', context)`
+
   Selanjutnya, saya membuat berkas HTML baru bernama `register.html` pada direktori `main/templates`. Isi dari `register.html` adalah:
-  ```python
-  `{% extends 'base.html' %}
+
+  `{% extends 'base.html' %}`
+
+
   `{% block meta %}`
 
   `<title>Register</title>`
+
   `{% endblock meta %}`
+
 
   `{% block content %}`
 
+
   `<div class="login">`
+
     `<h1>Register</h1>`
 
+
     `<form method="POST">`
+
       `{% csrf_token %}`
+
       `<table>`
+
         `{{ form.as_table }}`
+
         `<tr>`
+
           `<td></td>`
+
           `<td><input type="submit" name="submit" value="Daftar" /></td>`
+
         `</tr>`
+
       `</table>`
+
     `</form>`
 
+
     `{% if messages %}`
+
     `<ul>`
+
       `{% for message in messages %}`
+
       `<li>{{ message }}</li>`
+
       `{% endfor %}`
+
     `</ul>`
+
     `{% endif %}`
+
   `</div>`
 
+
   `{% endblock content %}`
-  ```
+
   Setelah itu, saya impor fungsi register pada berkas `urls.py` yang ada pada subdirektori `main` dan menambahkan path url ke dalam `urlpatterns` untuk mengakses fungsi yang sudah diimpor tadi.
 
   `from main.views import register`
@@ -408,67 +423,107 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   `from django.contrib.auth import authenticate, login`
 
   Masih di berkas yang sama, saya menambahkan fungsi `login_user`. Fungsi ini berfungsi untuk mengautentikasi pengguna yang ingin *login*.
-  ```python
+
   `def login_user(request):`
+
      `if request.method == 'POST':`
+
         `form = AuthenticationForm(data=request.POST)`
 
+
         `if form.is_valid():`
+
               `user = form.get_user()`
+
               `login(request, user)`
+
               `return redirect('main:show_main')`
 
+
      `else:`
+
         `form = AuthenticationForm(request)`
+
      `context = {'form': form}`
 
      `return render(request, 'login.html', context)`
-  ```
+
   Setelah itu, saya membuat berkas HTML baru bernama `login.html` pada direktori `main/templates`. Isi dari `login.html` adalah sebagai berikut:
-  ```python
+
   `{% extends 'base.html' %}`
 
+
   `{% block meta %}`
+
   `<title>Login</title>`
+
   `{% endblock meta %}`
 
+
   `{% block content %}`
+
   `<div class="login">`
+
     `<h1>Login</h1>`
 
+
     `<form method="POST" action="">`
+
       `{% csrf_token %}`
+
       `<table>`
+
         `{{ form.as_table }}`
+
         `<tr>`
+
           `<td></td>`
+
           `<td><input class="btn login_btn" type="submit" value="Login" /></td>`
+
         `</tr>`
+
       `</table>`
+
     `</form>`
 
+
     `{% if messages %}`
+
     `<ul>`
+
       `{% for message in messages %}`
+
       `<li>{{ message }}</li>`
+
       `{% endfor %}`
+
     `</ul>`
+
     `{% endif %} Don't have an account yet?`
+
     `<a href="{% url 'main:register' %}">Register Now</a>`
+
   `</div>`
 
+
   `{% endblock content %}`
-  ```
+
   Kemudian impor fungsi `login_user` pada berkas `urls.py` dan saya menambahkan path url ke dalam `urlpatterns` untuk mengakses fungsi yang diimpor tersebut.
-  ```python
+
   `...`
+
   `from main.views import login_user`
 
+
   `urlpatterns = [`
+
      `...`
+
      `path('login/', login_user, name='login'),`
+
   `]`
-  ```
+
   * Fungsi registrasi
 
   Selanjutnya adalah membuat fungsi *logout*. Saya menambahkan import `logout` pada bagian paling atas di berkas `views.py` yang ada di subdirektori main. 
@@ -477,29 +532,40 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
 
 
   Lalu, saya menambahkan fungsi di bawah ini ke dalam fungsi `views.py` untuk melakukan mekanisme *logout*.
-  ```python
+
   `def logout_user(request):`
+
       `logout(request)`
+
       `return redirect('main:login')`
-  ```
+
   Pada berkas `main.html` yang ada pada direktori `main/templates`, saya menambahkan potongan kode di bawah ini setelah *hyperlink tag* untuk Add New Product Entry.
-  ```python
+
   `...`
+
   `<a href="{% url 'main:logout' %}">`
+
     `<button>Logout</button>`
+
   `</a>`
+
   `...`
-  ```
+
   Kemudian impor fungsi `logout_user` pada berkas `urls.py` dan saya menambahkan path url ke dalam `urlpatterns` untuk mengakses fungsi yang diimpor tersebut.
-  ```python
+
   `...`
+
   `from main.views import logout_user`
 
+
   `urlpatterns = [`
+
      `...`
+
      `path('logout/', logout_user, name='logout'),`
+
   `]`
-  ```
+
   * Merestriksi Akses Halaman Main
 
   Pada berkas `views.py` yang ada pada subdirektori `main`, saya menambahkan import `login_required` pada bagian paling atas.
@@ -507,55 +573,46 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   from django.contrib.auth.decorators import login\_required
 
   Setelah itu, tambahkan potongan kode `@login_required(login_url='/login')` di atas fungsi `show_main` agar halaman `main` hanya dapat diakses oleh pengguna yang sudah login (terautentikasi).
-  ```python
+
   `...`
+
   `@login_required(login_url='/login')`
+
   `def show_main(request):`
+
   `...`
-  ```
 
 * **Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.**  
-    ![image](https://github.com/user-attachments/assets/3da5c497-d6a6-42be-a986-1192f2a194c5)
-
-    ![image](https://github.com/user-attachments/assets/c9876645-602c-4c97-a999-17dc9539e6bf)
-
+    
 * **Menghubungkan model Product dengan User.**  
-  Langkah pertama yang saya lakukan adalah menambahkan kode berikut pada dibawah baris kode untuk mengimpor model pada berkas `models.py` yang ada pada subdirektori `main`:
-  ```python  
-  ...  
+  Langkah pertama yang saya lakukan adalah menambahkan kode berikut pada dibawah baris kode untuk mengimpor model pada berkas `models.py` yang ada pada subdirektori `main`:  
+  `...`  
   `from django.contrib.auth.models import User`  
-  ...
-  ```  
-  Pada model `ProductEntry` yang sudah dibuat, tambahkan potongan kode berikut:
-  ```python
-  class ProductEntry(models.Model):  
-      user = models.ForeignKey(User, on_delete=models.CASCADE)  
-      ...
-  ```  
+  `...`  
+  Pada model `ProductEntry` yang sudah dibuat, tambahkan potongan kode berikut:  
+  `class ProductEntry(models.Model):`  
+      `user = models.ForeignKey(User, on_delete=models.CASCADE)`  
+      `...`  
   Kemudian, ubah potongan kode pada fungsi `create_product_entry` pada berkas `views.py` yang ada pada subdirektori main menjadi sebagai berikut:  
-  ```python
-  def create_product_entry(request):  
-      form = ProductEntryForm(request.POST or None)  
+  `def create_product_entry(request):`  
+      `form = ProductEntryForm(request.POST or None)`  
     
-      if form.is_valid() and request.method == "POST":  
-          product_entry = form.save(commit=False)  
-          product_entry.user = request.user  
-          form.save()  
-          return redirect('main:show_main')  
+      `if form.is_valid() and request.method == "POST":`  
+          `product_entry = form.save(commit=False)`  
+          `product_entry.user = request.user`  
+          `form.save()`  
+          `return redirect('main:show_main')`  
     
-      context = {'form': form}  
-      return render(request, "create_product_entry.html", context)
-  ```  
+      `context = {'form': form}`  
+      `return render(request, "create_product_entry.html", context)`  
   Ubahlah *value* dari `product_entries` dan `context` pada fungsi `show_main` menjadi seperti berikut.  
-  ```python 
-  def show_main(request):`  
+  `def show_main(request):`  
       `product_entries = ProductEntry.objects.filter(user=request.user)`  
       `context = {`  
           `'name': request.user.username,`  
            `...`  
       `}`  
-  `...`
-  ```  
+  `...`  
   Simpan semua perubahan, dan saya melakukan migrasi model dengan `python manage.py makemigrations`. Nantinya, akan muncul error saat melakukan migrasi model dan disajikan 2 pilihan. Pilih nomor 1 untuk menetapkan *default value* untuk *field user* pada semua *row* yang telah dibuat pada *database*. Lalu, ketik angka 1 lagi untuk menetapkan user dengan ID 1 (yang sudah kita buat sebelumnya) pada model yang sudah ada.  
   Selanjutnya, jalankan `python manage.py` migrate untuk mengaplikasikan migrasi yang dilakukan pada poin sebelumnya. Langkah terakhir, kita harus mempersiapkan aplikasi web kita untuk *environment production*. Untuk itu, tambahkan sebuah import baru pada `settings.py` yang ada pada subdirektori `eshop`.  
   `import os`  
@@ -564,48 +621,1020 @@ Namun sayangnya, tidak semua cookies aman dari serangan siber. Cookies tanpa atr
   `DEBUG = not PRODUCTION`  
 * **Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.**  
   Untuk menampilkan detail informasi pengguna yang sedang *logged in*, langkah pertama yang saya lakukan adalah *logout* terlebih dahulu apabila sedang menjalankan aplikasi Django. Setelah itu, saya menambahkan import `HttpResponseRedirect`, `reverse`, dan `datetime` pada bagian paling atas di berkas `views.py` yang ada pada subdirektori main.  
-  ```python
-  import datetime`  
+  `import datetime`  
   `from django.http import HttpResponseRedirect`  
-  `from django.urls import reverse`
-  ```  
+  `from django.urls import reverse`  
   Pada fungsi `login_user`, saya menambahkan fungsionalitas dengan menambahkan cookie yang bernama `last_login` untuk melihat kapan terakhir kali pengguna melakukan login. Saya mengganti kode yang ada pada blok `if form.is_valid()` menjadi potongan kode berikut.  
-  ```python
-  ...  
+  `...`  
   `if form.is_valid():`  
       `user = form.get_user()`  
       `login(request, user)`  
       `response = HttpResponseRedirect(reverse("main:show_main"))`  
       `response.set_cookie('last_login', str(datetime.datetime.now()))`  
       `return response`  
-  `...`
-  ``` 
+  `...`  
   Kemudian, pada fungsi `show_main`, tambahkan potongan kode `'last_login': request.COOKIES['last_login']` ke dalam variabel `context`.   
-  ```python
-  context = {`  
+  `context = {`  
           `'name': request.user.username,`  
           `'application' : 'Shopeeta',`  
           `'name' : 'Dandi Apriyansyah',`  
           `'class' : 'PBP A',`  
           `'product_entries': product_entries,`  
           `'last_login': request.COOKIES['last_login'],`  
-         `}`
-  ``` 
+         `}`  
   Setelah itu, saya memodifikasi fungsi `logout_user` menjadi seperti potongan kode berikut.  
-  ```python
-  def logout_user(request):  
+  `def logout_user(request):`  
       `logout(request)`  
       `response = HttpResponseRedirect(reverse('main:login'))`  
       `response.delete_cookie('last_login')`  
-      `return response`
-  ```  
+      `return response`  
   Modifikasi berkas main.html dengan menambahkan potongan kode berikut di setelah tombol `logout` untuk menampilkan data *last login*.  
-  ```python
-  ...  
+  `...`  
   `<h5>Sesi terakhir login: {{ last_login }}</h5>`  
-  `...`
-  ```  
+  `...`  
   Langkah terakhir adalah *refresh* halaman *login* (atau jalankan dengan perintah `python manage.py runserver` jika kamu belum menjalankan proyekmu) dan cobalah untuk *login*. Data last login kamu akan muncul di halaman main. 
+
+# Tugas Individu 5
+
+1. **Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut\!**  
+1) Inline styles (anything inside a style tag)   
+   Inline styles yang ditulis langsung pada elemen HTML memiliki prioritas tertinggi. Inline styles didefinisikan langsung dalam atribut `style` elemen. CSS ini akan memiliki prioritas tertinggi karena ditulis langsung pada elemen `<p>.`  
+2) ID selectors  
+   Selector yang menggunakan ID (`#id`) memiliki spesifisitas yang lebih tinggi dibandingkan classes selector dan elemen selector. CSS selector ini memiliki prioritas yang lebih kuat karena ID dalam satu halaman HTML harus unik.   
+3) Classes selector  
+   Selector yang menggunakan class (`.class`), pseudo-class (`:hover`, `:nth-child`), atau attribute selector (`[type="text"]`) berada di level prioritas berikutnya setelah ID selector. Jika ada konflik antara class, pseudo-class, atau attribute selector, maka aturan dengan selector yang lebih spesifik akan diterapkan.  
+4) Element selector  
+   Selector yang hanya menggunakan nama tag HTML (misalnya `div`, `p`, `a`) memiliki prioritas paling rendah dibandingkan yang lainnya. Mereka akan diterapkan hanya jika tidak ada selector lain yang lebih spesifik.  
+     
+2. **Mengapa *responsive design* menjadi konsep yang penting dalam pengembangan aplikasi *web*? Berikan contoh aplikasi yang sudah dan belum menerapkan *responsive design*\!**
+
+Alasan responsive design menjadi konsep yang penting dalam pengembangan aplikasi web adalah sebagai berikut:
+
+1. **Pengalaman Pengguna yang Konsisten di Berbagai Perangkat**  
+   Responsive design memastikan tampilan yang optimal dan konsisten, baik pada perangkat mobile, tablet, maupun desktop. Pengguna dapat mengakses website tanpa harus melakukan zoom atau scroll secara horizontal, sehingga mereka dapat dengan mudah menavigasi dan membaca konten.  
+2. **Meningkatkan Aksesibilitas**  
+   Dengan responsive design, aplikasi web dapat diakses oleh lebih banyak orang di berbagai jenis perangkat. Ini mendukung inklusivitas, karena pengguna dengan berbagai perangkat (termasuk yang lebih tua atau berbeda resolusinya) tetap dapat menggunakan aplikasi tersebut dengan nyaman.  
+3. **SEO dan Peringkat di Mesin Pencari**  
+   Mesin pencari seperti Google memberi prioritas lebih tinggi kepada website yang responsive karena mereka memberikan pengalaman pengguna yang lebih baik. Dengan menerapkan responsive design, sebuah website dapat meningkatkan ranking SEO dan menarik lebih banyak traffic.  
+4. **Efisiensi Biaya dan Waktu**  
+   Responsive design menghilangkan kebutuhan untuk mengembangkan versi aplikasi yang terpisah untuk desktop dan mobile. Dengan satu basis kode dan desain yang fleksibel, aplikasi web bisa diakses di berbagai perangkat dengan menyesuaikan layout secara otomatis.  
+5. **Adaptasi untuk Perangkat Masa Depan**  
+   Seiring berkembangnya teknologi dan munculnya perangkat baru dengan berbagai ukuran layar, responsive design memastikan bahwa aplikasi web dapat beradaptasi dengan perangkat baru tanpa perlu perubahan besar.
+
+Contoh aplikasi yang sudah menerapkan responsive design adalah X (Twitter), Airbnb, Google, Spotify, dan sebagainya. Sedangkan contoh aplikas yang belum menerapkan responsivr design adalah Situs Web Institusi Pemerintah Lama dan Situs Sekolah atau Universitas Lama.
+
+3. **Jelaskan perbedaan antara *margin*, *border*, dan *padding*, serta cara untuk mengimplementasikan ketiga hal tersebut\!**  
+1. Margin  
+   Margin adalah jarak antara elemen dengan elemen lain di sekitarnya (spasi di luar border). Margin berfungsi untuk mengosongkan area di sekitar *border* (transparan) dan mengontrol ruang kosong antara elemen dengan elemen lainnya. Margin tidak mempengaruhi ukuran elemen itu sendiri.  
+2. Border  
+   Border adalah garis pembatas di sekitar elemen, yang berada di antara margin dan padding. Border berfungsi untuk memberikan visualisasi batas di sekitar elemen, bisa berupa garis dengan berbagai warna, gaya, dan ketebalan.  
+3. Padding   
+   Padding adalah ruang kosong antara konten elemen dan batas elemen (border). Padding berfungsi untuk mengontrol jarak antara konten elemen dengan border. Padding akan memperbesar ukuran elemen secara keseluruhan jika diberikan nilai tanpa mempengaruhi konten di dalamnya.  
+4.   
+     
+     
+4. **Jelaskan konsep *flex box* dan *grid layout* beserta kegunaannya\!**  
+* Flexbox (Flexible Box Layout)
+
+Flexbox adalah metode tata letak satu dimensi (one-dimensional layout), yang berarti bahwa elemen-elemen ditata dalam satu arah, baik itu sejajar secara horizontal (baris) atau vertikal (kolom). Flexbox memudahkan pengaturan posisi, ukuran, dan distribusi ruang antar elemen dalam sebuah kontainer, terutama ketika ukuran elemen tidak diketahui atau dinamis.
+
+Kegunaan:
+
+* Memudahkan pembuatan tata letak yang responsif.  
+* Ideal untuk tata letak yang sederhana dan linear, seperti baris elemen navigasi, kartu, atau elemen daftar.  
+* Flexbox sangat berguna ketika Anda memiliki konten yang bervariasi ukurannya, namun Anda ingin elemen-elemen tersebut tetap seimbang secara proporsional di dalam suatu kontainer.
+
+*  CSS Grid Layout
+
+CSS Grid adalah metode tata letak dua dimensi (two-dimensional layout), yang berarti elemen dapat disusun baik secara baris (horizontal) maupun kolom (vertikal). Grid memberikan kontrol yang lebih baik dan fleksibilitas lebih besar untuk tata letak halaman yang kompleks. Anda dapat membuat baris dan kolom dengan ukuran yang tetap atau dinamis, serta mengatur elemen agar melintasi beberapa baris atau kolom.
+
+Kegunaan:
+
+* Cocok untuk tata letak halaman yang lebih kompleks, seperti tata letak galeri, dashboard, atau halaman web dengan struktur grid yang kaku.  
+* CSS Grid sangat berguna ketika Anda memiliki kontrol penuh atas struktur tata letak halaman dengan baris dan kolom yang teratur.  
+* Fleksibel dalam mengatur ukuran kolom dan baris, serta elemen-elemen yang merentang beberapa baris atau kolom.
+
+5. **Jelaskan bagaimana cara kamu mengimplementasikan *checklist* di atas secara *step-by-step* (bukan hanya sekadar mengikuti tutorial)\!**  
+* **Implementasi fungsi untuk menghapus dan mengedit *product*.**  
+  Langkah pertama yang saya lakukan adalah menambahkan fungsi baru bernama `edit_product` yang menerima parameter request dan id pada berkas views.py di direktori main.  Setelah itu, saya menambahkan import pada berkas views.py sebagai berikut:  
+  \`\`\`python  
+  from django.shortcuts import .., reverse  
+  from django.http import .., HttpResponseRedirect  
+  \`\`\`  
+  Kemudian saya membuat berkas HTML baru bernama `edit_mood.html` pada subdirektori `main/templates`. Isi berkas tersebut dengan template berikut.  
+  \`\`\`python  
+  {% extends 'base.html' %}  
+  {% load static %}  
+  {% block meta %}  
+  \<title\>Edit Product\</title\>  
+  {% endblock meta %}  
+    
+  {% block content %}  
+  {% include 'navbar.html' %}  
+  \<div class="flex flex-col min-h-screen bg-gray-100"\>  
+    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>  
+      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Edit Product Entry\</h1\>  
+      
+      \<div class="bg-gray rounded-lg p-6 form-style"\>  
+        \<form method="POST" class="space-y-6"\>  
+            {% csrf\_token %}  
+            {% for field in form %}  
+                \<div class="flex flex-col"\>  
+                    \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>  
+                        {{ field.label }}  
+                    \</label\>  
+                    \<div class="w-full text-black"\>  
+                        {{ field }}  
+                    \</div\>  
+                    {% if field.help\_text %}  
+                        \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>  
+                    {% endif %}  
+                    {% for error in field.errors %}  
+                        \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>  
+                    {% endfor %}  
+                \</div\>  
+            {% endfor %}  
+            \<div class="flex justify-center mt-6"\>  
+                \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>  
+                    Edit Product Entry  
+                \</button\>  
+            \</div\>  
+        \</form\>  
+    \</div\>  
+    \</div\>  
+  \</div\>  
+  {% endblock %}  
+  \`\`\`  
+  Setelah membuat berkas tersebut, saya mengimpor fungsi `edit_product` yang sudah dibuat pada berkas urls.py dan menambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi. Lalu, pada berkas `main.html` yang berada pada subdirektori `main/templates` saya menambahkan potongan kode berikut sejajar dengan elemen `<td>` terakhir agar terlihat tombol *edit* pada setiap baris tabel.  
+  \`\`\`python  
+  ...  
+  \<tr\>  
+      ...  
+      \<td\>  
+          \<a href="{% url 'main:edit\_product' product\_entry.pk %}"\>  
+              \<button\>  
+                  Edit  
+              \</button\>  
+          \</a\>  
+      \</td\>  
+  \</tr\>  
+  ...  
+  \`\`\`  
+  Untuk menghapus product, kurang lebih cara yang saya terapkan sama. Pertama, saya menambahkan fungsi baru bernama `delete_product` yang menerima parameter request dan id pada berkas views.py di direktori main untuk mengaus data.  Setelah itu, saya menambahkan import pada berkas views.py sebagai berikut:  
+  \`\`\`python  
+  from django.shortcuts import .., reverse  
+  from django.http import .., HttpResponseRedirect  
+  \`\`\`  
+  Kemudian saya membuat berkas HTML baru bernama `edit_mood.html` pada subdirektori `main/templates`. Isi berkas tersebut dengan template berikut.  
+  \`\`\`python  
+  def delete\_mood(request, id):  
+      \# Get mood berdasarkan id  
+      product \= ProductEntry.objects.get(pk \= id)  
+      \# Hapus mood  
+      product.delete()  
+      \# Kembali ke halaman awal  
+      return HttpResponseRedirect(reverse('main:show\_main'))  
+  \`\`\`  
+  Setelah membuat berkas tersebut, saya mengimpor fungsi `delete_product` yang sudah dibuat pada berkas urls.py dan menambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi.   
+    
+* **Kustomisasi desain pada *template* HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework**  
+  Sebelum kustomisasi desain pada aplikasi, saya melakukan konfigurasi *Static Files* pada Aplikasi. Pada berkas setting.py, saya menambahkan *middleware* WhiteNoise.  
+  \`\`\`python  
+  ...  
+  MIDDLEWARE \= \[  
+      'django.middleware.security.SecurityMiddleware',  
+      'whitenoise.middleware.WhiteNoiseMiddleware', \#Tambahkan tepat di bawah SecurityMiddleware  
+      ...  
+  \]  
+  ...  
+  \`\`\`  
+  Dengan menambahkan *middleware* WhiteNoise pada `settings.py`, Django dapat menangani *file* statis secara otomatis saat berada dalam mode produksi `(DEBUG=False)` tanpa perlu pengaturan yang rumit. Ini penting agar file statis tetap dapat diakses dalam proses deployment, karena secara default, ketika `DEBUG=False`, Django tidak memberikan akses ke *file* statis. Kemudian, pada berkas `settings.py`, saya memastikan variabel `STATIC_ROOT`, `STATICFILES_DIRS`, dan `STATIC_URL` dikonfigurasikan seperti ini:  
+  \`\`\`python  
+  ...  
+  STATIC\_URL \= '/static/'  
+  if DEBUG:  
+      STATICFILES\_DIRS \= \[  
+          BASE\_DIR / 'static' \# merujuk ke /static root project pada mode development  
+      \]  
+  else:  
+      STATIC\_ROOT \= BASE\_DIR / 'static' \# merujuk ke /static root project pada mode production  
+  ...  
+  \`\`\`  
+  Selanjutnya, saya membuat berkas `global.css` di `/static/css` pada `root directory`. Lalu, saya menghubungkan `global.css` dan *script* Tailwind ke `base.html` dengan menambahkan berkas tersebut ke `base.html` `a`gar *style* CSS yang ditambahkan di `global.css` dapat digunakan dalam template Django. Modifikasi berkas `base.html` kamu seperti berikut:  
+  \`\`\`python  
+  {% load static %}  
+  \<\!DOCTYPE html\>  
+  \<html lang="en"\>  
+    \<head\>  
+      \<meta charset="UTF-8" /\>  
+      \<meta name="viewport" content="width=device-width, initial-scale=1.0" /\>  
+      {% block meta %} {% endblock meta %}  
+      \<script src="https://cdn.tailwindcss.com"\>\</script\>  
+      \<link rel="stylesheet" href="{% static 'css/global.css' %}"/\>  
+    \</head\>  
+    \<body\>  
+      {% block content %} {% endblock content %}  
+    \</body\>  
+  \</html\>  
+  \`\`\`  
+  * ***Styling*** **halaman Login** 
+
+  Modifikasi `login.html` pada subdirektori `main/templates/` menjadi seperti berikut:
+
+  \`\`\`python
+
+  {% extends 'base.html' %}
+
+
+  {% block meta %}
+
+  \<title\>Login\</title\>
+
+  {% endblock meta %}
+
+
+  {% block content %}
+
+  \<div class="min-h-screen flex items-center justify-center w-screen bg-teal-700 py-12 px-4 sm:px-6 lg:px-8"\>
+
+    \<div class="max-w-md w-full space-y-8"\>
+
+      \<div\>
+
+        \<h2 class="mt-6 text-center text-white text-3xl font-extrabold text-gray-900"\>
+
+          Login to your account
+
+        \</h2\>
+
+      \</div\>
+
+      \<form class="mt-8 space-y-6" method="POST" action=""\>
+
+        {% csrf\_token %}
+
+        \<input type="hidden" name="remember" value="true"\>
+
+        \<div class="rounded-md shadow-sm \-space-y-px"\>
+
+          \<div\>
+
+            \<label for="username" class="sr-only"\>Username\</label\>
+
+            \<input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Username"\>
+
+          \</div\>
+
+          \<div\>
+
+            \<label for="password" class="sr-only"\>Password\</label\>
+
+            \<input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-900 focus:border-blue-900 focus:z-10 sm:text-sm" placeholder="Password"\>
+
+          \</div\>
+
+        \</div\>
+
+
+        \<div\>
+
+          \<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900"\>
+
+            Sign in
+
+          \</button\>
+
+        \</div\>
+
+      \</form\>
+
+
+      {% if messages %}
+
+      \<div class="mt-4"\>
+
+        {% for message in messages %}
+
+        {% if message.tags \== "success" %}
+
+              \<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert"\>
+
+                  \<span class="block sm:inline"\>{{ message }}\</span\>
+
+              \</div\>
+
+          {% elif message.tags \== "error" %}
+
+              \<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"\>
+
+                  \<span class="block sm:inline"\>{{ message }}\</span\>
+
+              \</div\>
+
+          {% else %}
+
+              \<div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert"\>
+
+                  \<span class="block sm:inline"\>{{ message }}\</span\>
+
+              \</div\>
+
+          {% endif %}
+
+        {% endfor %}
+
+      \</div\>
+
+      {% endif %}
+
+
+      \<div class="text-center mt-4"\>
+
+        \<p class="text-sm text-white"\>
+
+          Don't have an account yet?
+
+          \<a href="{% url 'main:register' %}" class="font-medium text-blue-900 hover:text-black"\>
+
+            Register Now
+
+          \</a\>
+
+        \</p\>
+
+      \</div\>
+
+    \</div\>
+
+  \</div\>
+
+  {% endblock content %}
+
+  \`\`\`
+
+  * ***Styling*** **halaman Register**
+
+  Modifikasi `register.html` pada subdirektori `main/templates/` menjadi seperti berikut:
+
+  \`\`\`python
+
+  {% extends 'base.html' %}
+
+
+  {% block meta %}
+
+  \<title\>Register\</title\>
+
+  {% endblock meta %}
+
+
+  {% block content %}
+
+  \<div class="min-h-screen flex items-center justify-center bg-teal-700 py-12 px-4 sm:px-6 lg:px-8"\>
+
+    \<div class="max-w-md w-full space-y-8 form-style"\>
+
+      \<div\>
+
+        \<h2 class="mt-6 text-center text-3xl font-extrabold text-white"\>
+
+          Create your account
+
+        \</h2\>
+
+      \</div\>
+
+      \<form class="mt-8 space-y-6" method="POST"\>
+
+        {% csrf\_token %}
+
+        \<input type="hidden" name="remember" value="true"\>
+
+        \<div class="rounded-md shadow-sm \-space-y-px"\>
+
+          {% for field in form %}
+
+            \<div class="{% if not forloop.first %}mt-4{% endif %}"\>
+
+              \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-white"\>
+
+                {{ field.label }}
+
+              \</label\>
+
+              \<div class="relative"\>
+
+                {{ field }}
+
+                \<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"\>
+
+                  {% if field.errors %}
+
+                    \<svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"\>
+
+                      \<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /\>
+
+                    \</svg\>
+
+                  {% endif %}
+
+                \</div\>
+
+              \</div\>
+
+              {% if field.errors %}
+
+                {% for error in field.errors %}
+
+                  \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+
+                {% endfor %}
+
+              {% endif %}
+
+            \</div\>
+
+          {% endfor %}
+
+        \</div\>
+
+
+        \<div\>
+
+          \<button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-blue-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900"\>
+
+            Register
+
+          \</button\>
+
+        \</div\>
+
+      \</form\>
+
+
+      {% if messages %}
+
+      \<div class="mt-4"\>
+
+        {% for message in messages %}
+
+        \<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"\>
+
+          \<span class="block sm:inline"\>{{ message }}\</span\>
+
+        \</div\>
+
+        {% endfor %}
+
+      \</div\>
+
+      {% endif %}
+
+
+      \<div class="text-center mt-4"\>
+
+        \<p class="text-sm text-white"\>
+
+          Already have an account?
+
+          \<a href="{% url 'main:login' %}" class="font-medium text-blue-900 hover:text-blue-950"\>
+
+            Login here
+
+          \</a\>
+
+        \</p\>
+
+      \</div\>
+
+    \</div\>
+
+  \</div\>
+
+  {% endblock content %}
+
+  \`\`\`
+
+  * ***Styling*** **halaman Create Mood Entry**
+
+  Modifikasi `create_product_entry.html` pada subdirektori `main/templates/` menjadi seperti berikut:
+
+  \`\`\`python
+
+  {% extends 'base.html' %}
+
+  {% load static %}
+
+  {% block meta %}
+
+  \<title\>Create Product\</title\>
+
+  {% endblock meta %}
+
+
+  {% block content %}
+
+  {% include 'navbar.html' %}
+
+
+  \<div class="flex flex-col min-h-screen bg-gray-100"\>
+
+    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>
+
+      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Create Product Entry\</h1\>
+
+    
+
+      \<div class="bg-white shadow-md rounded-lg p-6 form-style"\>
+
+        \<form method="POST" class="space-y-6"\>
+
+          {% csrf\_token %}
+
+          {% for field in form %}
+
+            \<div class="flex flex-col"\>
+
+              \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>
+
+                {{ field.label }}
+
+              \</label\>
+
+              \<div class="w-full text-black"\>
+
+                {{ field }}
+
+              \</div\>
+
+              {% if field.help\_text %}
+
+                \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>
+
+              {% endif %}
+
+              {% for error in field.errors %}
+
+                \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+
+              {% endfor %}
+
+            \</div\>
+
+          {% endfor %}
+
+          \<div class="flex justify-center mt-6"\>
+
+            \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>
+
+              Create Product Entry
+
+            \</button\>
+
+          \</div\>
+
+        \</form\>
+
+      \</div\>
+
+    \</div\>
+
+  \</div\>
+
+
+  {% endblock %}
+
+  \`\`\`
+
+  * *Styling* halaman Home
+
+  Saya membuat berkas `card_info.html` di directory `main/templates`, lalu mengisi berkas tersebut dengan kode html seperti berikut:
+
+  \`\`\`python
+
+  \<div class="bg-teal-700 rounded-xl overflow-hidden border-2 border-teal-700"\>
+
+      \<div class="p-4"\>
+
+        \<h5 class="text-lg font-semibold text-white"\>{{ title }}\</h5\>
+
+        \<p class="text-white"\>{{ value }}\</p\>
+
+      \</div\>
+
+  \</div\>
+
+  \`\`\`
+
+  Kemudian, saya membuat berkas `card_product.html` di directory `main/templates`, lalu mengisi berkas tersebut dengan kode html seperti berikut:
+
+  \`\`\`python
+
+  \<div class="relative break-inside-avoid"\>
+
+      \<div class="relative top-5 bg-white hover:bg-gray-200 shadow-md rounded-lg mb-6 break-inside-avoid flex flex-col border border-gray-200"\>
+
+        \<div class="p-4"\>
+
+          \<h2 class="text-lg font-bold mt-1 text-gray-800 mb-2"\>{{product\_entry.name}}\</h2\>
+
+          \<p class="font-semibold text-black mb-2"\>Description\</p\> 
+
+          \<p class="text-gray-700 mb-2"\>
+
+            \<span class="bg-\[linear-gradient(to\_bottom,transparent\_0%,transparent\_calc(100%\_-\_1px),\#CDC1FF\_calc(100%\_-\_1px))\] bg-\[length:100%\_1.5rem\] pb-1"\>{{product\_entry.description}}\</span\>
+
+          \</p\>
+
+          \<div class="mt-4"\>
+
+            \<p class="text-lg font-bold text-indigo-600 mt-2"\>IDR {{product\_entry.price}}\</p\>
+
+          \</div\>
+
+        \</div\>
+
+      \</div\>
+
+      \<div class="absolute flex space-x-1 \-bottom-9 right-0 transform translate-x-2"\>
+
+        \<a href="{% url 'main:edit\_product' product\_entry.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md"\>
+
+          \<svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor"\>
+
+            \<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /\>
+
+          \</svg\>
+
+        \</a\>
+
+        \<a href="{% url 'main:delete\_product' product\_entry.pk %}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md"\>
+
+          \<svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" viewBox="0 0 20 20" fill="currentColor"\>
+
+            \<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /\>
+
+          \</svg\>
+
+        \</a\>
+
+      \</div\>
+
+    \</div\>
+
+  \`\`\`
+
+  Selanjutnya, saya memilih satu foto atau *icon* sedih dari internet dan dinamakan `sedih-banget.png`. Setelah itu, saya menambahkan foto `sedih-banget.png` tadi ke direktori `static/image` yang berada di `root project`. Setelah semua berkas selesai dibuat, saya menggunakan `card_info.html, card_mood.html, dan sedih-banget.png` tersebut ke template `main.html`. Pada *directory* `main/templates`, modifikasi main.html seperti ini:
+
+  \`\`\`python
+
+  {% extends 'base.html' %}
+
+  {% load static %}
+
+
+  {% block meta %}
+
+  \<title\>Shopeeta\</title\>
+
+  {% endblock meta %}
+
+  {% block content %}
+
+  {% include 'navbar.html' %}
+
+  \<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col"\>
+
+    \<div class="p-2 mb-6 relative"\>
+
+      \<div class="relative grid grid-cols-1 z-30 md:grid-cols-3 gap-8"\>
+
+        {% include "card\_info.html" with title='NPM' value=npm %}
+
+        {% include "card\_info.html" with title='Name' value=name %}
+
+        {% include "card\_info.html" with title='Class' value=class %}
+
+      \</div\>
+
+      \<div class="w-full px-6  absolute top-\[44px\] left-0 z-20 hidden md:flex"\>
+
+        \<div class="w-full min-h-4 bg-indigo-700"\>
+
+        \</div\>
+
+      \</div\>
+
+      \<div class="h-full w-full py-6  absolute top-0 left-0 z-20 md:hidden flex "\>
+
+        \<div class="h-full min-w-4 bg-indigo-700 mx-auto"\>
+
+        \</div\>
+
+      \</div\>
+
+  \</div\>
+
+      \<div class="px-3 mb-4"\>
+
+        \<h1 class="font-bold text-blue-900 text-center"\>Last Login: {{last\_login}}\</h1\>
+
+      \</div\>
+
+      \<div class="flex justify-end mb-6"\>
+
+          \<a href="{% url 'main:create\_product\_entry' %}" class="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"\>
+
+              Add New Product Entry
+
+          \</a\>
+
+      \</div\>
+
+      
+
+      {% if not product\_entries %}
+
+      \<div class="flex flex-col items-center justify-center min-h-\[24rem\] p-6"\>
+
+          \<img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/\>
+
+          \<p class="text-center text-gray-600 mt-4"\>Belum ada produk yang terdaftar.\</p\>
+
+      \</div\>
+
+      {% else %}
+
+      \<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"\>
+
+          {% for product\_entry in product\_entries %}
+
+              {% include 'card\_product.html' with product\_entry=product\_entry %}
+
+          {% endfor %}
+
+      \</div\>
+
+      {% endif %}
+
+  \</div\>
+
+  {% endblock content %}
+
+  \`\`\`
+
+  * *Styling* halaman Edit Product
+
+  Membuat berkas `edit_product.html` pada subdirektori `main/templates` dengan potongan kode seperti berikut:
+
+  \`\`\`python
+
+  {% extends 'base.html' %}
+
+  {% load static %}
+
+  {% block meta %}
+
+  \<title\>Edit Product\</title\>
+
+  {% endblock meta %}
+
+
+  {% block content %}
+
+  {% include 'navbar.html' %}
+
+  \<div class="flex flex-col min-h-screen bg-gray-100"\>
+
+    \<div class="container mx-auto px-4 py-8 mt-16 max-w-xl"\>
+
+      \<h1 class="text-3xl font-bold text-center mb-8 text-black"\>Edit Product Entry\</h1\>
+
+    
+
+      \<div class="bg-gray rounded-lg p-6 form-style"\>
+
+        \<form method="POST" class="space-y-6"\>
+
+            {% csrf\_token %}
+
+            {% for field in form %}
+
+                \<div class="flex flex-col"\>
+
+                    \<label for="{{ field.id\_for\_label }}" class="mb-2 font-semibold text-gray-700"\>
+
+                        {{ field.label }}
+
+                    \</label\>
+
+                    \<div class="w-full text-black"\>
+
+                        {{ field }}
+
+                    \</div\>
+
+                    {% if field.help\_text %}
+
+                        \<p class="mt-1 text-sm text-gray-500"\>{{ field.help\_text }}\</p\>
+
+                    {% endif %}
+
+                    {% for error in field.errors %}
+
+                        \<p class="mt-1 text-sm text-red-600"\>{{ error }}\</p\>
+
+                    {% endfor %}
+
+                \</div\>
+
+            {% endfor %}
+
+            \<div class="flex justify-center mt-6"\>
+
+                \<button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full"\>
+
+                    Edit Product Entry
+
+                \</button\>
+
+            \</div\>
+
+        \</form\>
+
+    \</div\>
+
+    \</div\>
+
+  \</div\>
+
+  {% endblock %}
+
+  \`\`\`
+
+  * **Membuat *navigation bar* (*navbar*) untuk fitur-fitur pada aplikasi yang *responsive* terhadap perbedaan ukuran *device*, khususnya *mobile* dan *desktop*.**
+
+  Saya membuat berkas HTML baru dengan nama `navbar.html` pada folder `templates/` di `root directory`. Isi dari `navbar.html` adalah sebagai berikut:
+
+  \`\`\`python
+
+  \<\!DOCTYPE html\>
+
+  \<html lang="en"\>
+
+  \<head\>
+
+      \<meta charset="UTF-8"\>
+
+      \<meta name="viewport" content="width=device-width, initial-scale=1.0"\>
+
+      \<title\>Responsive Navbar\</title\>
+
+      \<script src="https://cdn.tailwindcss.com"\>\</script\>
+
+  \</head\>
+
+  \<body class="bg-teal-700 text-white"\>
+
+
+      \<\!-- Navbar \--\>
+
+      \<nav class="bg-teal-700 p-4"\>
+
+          \<div class="container mx-auto flex justify-between items-center"\>
+
+              \<\!-- Logo \--\>
+
+              \<div class="text-2xl font-bold"\>
+
+                  Shopeeta
+
+              \</div\>
+
+
+              \<\!-- Mobile hamburger menu button \--\>
+
+              \<div class="block lg:hidden"\>
+
+                  \<button id="hamburger" class="text-gray-400 focus:outline-none"\>
+
+                      \<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"\>
+
+                          \<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"\>\</path\>
+
+                      \</svg\>
+
+                  \</button\>
+
+              \</div\>
+
+
+              \<\!-- Links (hidden on mobile) \--\>
+
+              \<div class="hidden lg:flex justify-between items-center space-x-6"\>
+
+                \<a href="\#" class="hover:text-gray-400"\>Home\</a\>
+
+                \<a href="\#" class="hover:text-gray-400"\>Products\</a\>
+
+                \<a href="\#" class="hover:text-gray-400"\>Categories\</a\>
+
+                \<a href="\#" class="hover:text-gray-400"\>Cart\</a\>
+
+              \</div\>
+
+
+              \<\!-- Authentication Links \--\>
+
+              \<div class="hidden lg:flex items-center"\>
+
+                {% if user.is\_authenticated %}
+
+                  \<span class="text-gray-300 mr-4"\>Welcome, {{ user.username }}\</span\>
+
+                  \<a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"\>
+
+                    Logout
+
+                  \</a\>
+
+                {% else %}
+
+                  \<a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2"\>
+
+                    Login
+
+                  \</a\>
+
+                  \<a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300"\>
+
+                    Register
+
+                  \</a\>
+
+                {% endif %}
+
+              \</div\>
+
+          \</div\>
+
+
+          \<\!-- Mobile Menu \--\>
+
+          \<div id="mobileMenu" class="hidden lg:hidden"\>
+
+              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Home\</a\>
+
+              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Products\</a\>
+
+              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Categories\</a\>
+
+              \<a href="\#" class="block py-2 px-4 hover:bg-gray-700"\>Cart\</a\>
+
+              {% if user.is\_authenticated %}
+
+                \<span class="block py-2 px-4"\>Welcome, {{ user.username }}\</span\>
+
+                \<a href="{% url 'main:logout' %}" class="block bg-red-500 py-2 px-4 text-center hover:bg-red-600"\>Logout\</a\>
+
+              {% else %}
+
+                \<a href="{% url 'main:login' %}" class="block bg-blue-500 py-2 px-4 text-center hover:bg-blue-600"\>Login\</a\>
+
+                \<a href="{% url 'main:register' %}" class="block bg-green-500 py-2 px-4 text-center hover:bg-green-600"\>Register\</a\>
+
+              {% endif %}
+
+          \</div\>
+
+      \</nav\>
+
+
+      \<script\>
+
+          const hamburger \= document.getElementById('hamburger');
+
+          const mobileMenu \= document.getElementById('mobileMenu');
+
+
+          hamburger.addEventListener('click', () \=\> {
+
+              mobileMenu.classList.toggle('hidden');
+
+          });
+
+      \</script\>
+
+
+  \</body\>
+
+  \</html\>
+
+  \`\`\`
+
+
+  
+
 
 [image1]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbQAAAEtCAYAAABgXZXNAABOrUlEQVR4Xu2dB5gURde28RURSSb0w5xzAowYACMGDBgBs4BgThjAgKhkUDGCoiQFBQNJxYCYRUFFESOCKCCYBRVz/e993r/GpndZdmFC9fRzX1dfu9PT09PT3VXPOadOna7khBBCiCKgUnyFEEIIkUQkaEIIIYoCCZoQQoiiQIImhBCiKJCgCSGEKAokaEIIIYoCCZoQQoiiQIImhBCiKJCgCZElbrrpJle5cmVXtWpVt+aaa2op0LLGGmu4rbfe2r377rvxSySKHAmaEFni+uuvd7Vq1XIdO3Z0TzzxhBs3bpyWPC9PPfWUe/zxx91GG23kpk6dGr9EosiRoAmRJRC09dZbz8RMFI5//vnHBE0eWvqQoAmRJRC0//u//zMPQRSOX375RYKWUiRoQmQJL2iPPfZY/K2CsHjxYrdw4cIl1v3xxx+2Di/mt99+cz/99JP78ccfbfn111+X2La0z0dZtGiR++6779zPP/8cf6ugSNDSiwRNiCwRkqD99ddf7oEHHnDnn3/+EuvfeOMNd95555mYPfzww+6UU05xRx99tC2XXnqpe/XVV03c/vzzTzdo0CB38cUXL/F5z+jRo90ZZ5zhmjRp4s4++2z35JNPxjcpGBK09CJBK1LokN566y334osvLrH+448/dpMmTXLvv/++GzNmjA2kjx8/3jok/qfD++ijj9zYsWNtLIhBdv6y7TPPPOO+/fZb99xzz2UG4F9++eUl9p9mQhI0PLHWrVu7GjVqLLF+yJAhrnr16iZaZ555plt77bXdrFmz3OzZs93w4cPdVltt5XbeeWcTvNNPP92tu+66S3we3nnnHcsi5PpzP9x3331up512cp9++ml804IgQUsvErQixXdY++yzzxLrycA76KCD3DXXXOPWWmst64A32GADt/7667s6deq4448/3jrm2rVr2zreI9GBdOjtttvOvfDCC9Z5sY5Og87v3nvvdfPmzVvie9JISIL2+++/uzZt2rjVV199ifVDhw51NWvWtPvjrLPOsuvrQcTwyBA5wom8zz0R56WXXnK77bbbElmEGEJ8JgQkaOlFglak/PDDD+6YY45x22yzzRLrsdpp7FHotLp162b/M7bCAjNmzHD169e3js6/N2rUKBM7vw2e4BZbbOEO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3zcDEiOwWEmdoHEznH766W7TTTd1DzzwgDVsLNWLL77Y1ahRw1166aXu559/tpvgpptucvvvv78bPny4mzlzpnkBn332mXWgPXr0cF26dHEbb7yxmzdvnh3zq6++6vbZZx/XuHFjWwd33XWXO++880rc1Nkknx7ap59+6mbNmmXeqW9ENMSJEyda4/X4xvrCCy9YB+PhHL733nt2ju+77z639dZb23oE6cADD3Qvvvii/Q98LtopffTRRyZgLBwHxzB37lxr3JzvOnXqWMfszz2eGw0ZrzvameeKUD007m/ueYTN8/TTT7vNNtvMHXPMMe722283Qw7oPLm3EUAMP67p2Wef7QYNGmTvP/roo65Zs2b2P/c8okhHGRKhCBr3On3KmDFjMuuI1Fx44YXWtyBWd955p7v88stdrVq13JVXXmkGMO2CfoPrsvnmm7sqVaq4M888096jj5kwYYLbZZddzChnXzvvvLNbY4013MKFCyPf7tw999zjtttuO+sX7r77bnfqqae6ddZZxz4bjWjQ3mhHUWif33333RLrfLtEkEtrT7Q7H93iL6INCCificI9+f333y+xzsN+ljfikjpB4yTTQNdbbz3zyLgJ6Bj32GMPEyduLiybHXbYwUTvgAMOcBtuuKHdUHy2efPmrnbt2u7444+3GwMh4cI/99xz9rpp06Zuzz33dFdffbV5etxU5557btEI2nHHHeeOPvpoO4cffvihCcZuu+3mNtlkE7f33ntnbkTO7fbbb2/nkIbpb+6BAwfa9nSgdJhbbbWVrecaYAzwOdYDYTI6Vh+GPOmkk8yboHM+6KCD3IknnmjeKY2ajqFSpUpum222sc6XewlDgu/iGubDawpV0KBfv35mrPlzybGutdZabvDgwWZINGnSxISpUaNGZmRgyNFGTj75ZNegQQO77rSLli1b2nnmOtNJ8dmPP/449m2FJSRB434YP358Zh2dO8LVtWvXjKeEgUdbwVDzeGE49NBDrQ3Rv3gw4OiP6F8QSF5zHTAeoyCMZ511Viasz/WjndB/eSMTo54IEtfZixpCy1AK7ZDhEgzCP/74w9oegkobRSAJZQP93/PPP+/OOOMM6+/4XfThbDN16lR3//3322cwhAGj9YorrrC+dvTo0eYkAPcf2yK8HHt0OKK8pFLQuMicNDpFbgYuAoJGR8nNxoWqWbOmu/HGG83KP/zww03gXnvtNbf66qtbR4qb365dO2vcXHA+t+WWW9p30NHXq1fPbsL+/fsXlaBVr17drb322ua1cr0QMTpHlp122sluVlh33XXtJsabpUFy4wKdJOcGEUIE8apo+JwnBO3888+39TSKjh072vnFA6QjRtw6dOjgtt12W7fvvvu6vn37upEjR1onjGBhpXJtp02b5ho2bOjq1q1rljCiiZGRa0IWNDxazgMGCBxyyCFu9913t04EwT/yyCNd79693QYbbGCWP+2Ejg5j7qqrrrJzjoCxLR4D9zjthHNc0XHPXBOaoEXD6IiQFzTv5XC/Imi+w49CSBhPOipWtIfWrVtnPo9RTn9Gm4yCKGB4Rq8Px0IbJLqC940Hd84555ixyF+uO9e4fv36rn379tYW6Rfp7/AiEU5ElvuCz+Bl0Sa32GILd9ppp5kBiQeJALZo0cIcAPaLEUw/yLFwz9Bm+RzX6aKLLsp8L++xLX0G71eUVAraKaecYpYGoRM6XTo/Lh4XAsuBRo7FipgBHRQNHYsFl/2JJ56w9Q899JDdHHSm3Bg0dC4swkbni/WDlVJMgoYAIfR0GjQqBJ7zSYPCqsfSw2rkWLiZuZ6IIJ+hAXHDE7713i4NngQdbmYaC0k03NQYD5xDOl7OIeFLrhENks6VDhq4jgcffLBZeawnvENjRdzopDmu/fbbz6222moZLzFXhCxoQAThqKOOcl9++aV1JIQdgfNOWyDqgAFBZ0Koi/t4xx13tLFODAKMkBNOOME6Tix47mu8t9AIRdAQnKpVq5qhR3/CfUob4R4hEcd7aBxn3EPzIB4IGn2Th3Exfh/XDIOS/2kziEgUvG/6JD5P5GLVVVc1ISKkzLFhsHANCWVyPP/5z3/MAMVYXH/99c0L9OF7+mTCpxg7QBIRYkfEBePVj8ESsqYPwMjH8B87dqytR8iJgNFe6SOJAnA/eS+MtonnSBvnGBDUatWqVTj0mEpB44RjWdBREn/GO8MCwvLhhNLhclH9mBDhGoQMiwEBY9zAr6ezphOlM+UiYQEznjRu3Dhz4f0YWjy+nU3ymRSClc95I8yAYNAIsNRYEDbGWDAI1lxzTesEudG5MbFIucnxwjgvXAcsOhoO5wuh69Spk10XvCwMC8QMDwwLkTFOGgcNm8bJ4Dh4QUPguAZ4gpxrOpIjjjjCrEQ+j6UaHcvLBaEmhXjooOj48MQIHXqDjUgFnSOWMWFI7mvaIsI8bNgw69Rol9zftB0EEc+BTpi/oRGKoNEZE82gD+Depz8hiYP7nk57RQQNYcK4wKjketIO4iA29G8YH4gW4sa1xvhDSBAcvHTWIbS77rqr7QtDh7ZNe0KIuQcYU6MP9OOwDz74oLXD7t272z1P+wbGuTFEMfoxkLzhSZuk73zyySfd0KFDzYBl/xhYhGTpc2mzCDTHQp+MsVTR7PBUChqdHCeKxA9OKuNeeAkI2gUXXGBuMQ2CTpULxMnHGkGkCD3S+Lkx2Q8WLfthHZYKyRB00NwYfBedPy53sXho3MSEB7lBaZgIOtcL65BxMM4dDYDzSsMDjg1rjBAVFj/nmfPEjcs5wzrk/PqxBpJtEDoaFeKHx0BHy/+ENBFVH56JChodLsYFx8N+hwwZYteZkA6eX3mnYywvoXtonF/CvXjVAwYMyKzn/qZj4X7HEKED5JwR8sUYA9bh5RLCBTpHLHb/OiRCEjTuh+j4F/cghnF0DK2igkb7wSDB0CjLUCbkiBHjDRcEBiGkv8Bjov9ijIx2RXtCVBA6xAvDEgEmIkN4kP6OqAdtH/iLB48xjVARgQGMWQSNe41xVz8+xnHSpn0Ehe9hn4Qxjz32WGvH7I9zRT/B4hPxKkLqBI2TSUfnrXVEivEA4AT6OWN0kIgSISu8Di9IeAZ0wLjqN998s7nv/j32g5fCb/ADrHSkeBnlnQqwPORT0Ait+puarCc6NBocAkJnSKwdsWIMko4T8aFR0hnSoOggaeTcvOyLhsx6LE0/N5BGwOdJJuGGJmSIpQuEvxDVuKDRALBG2TcdMR0GITa+n46X8EquCV3QCDNhYXPvRrPU8CD8NZ0zZ469prPDY0bY/Hpe+/ua647IeU85JEIStOgQBdC3kQyB0RYVNNrC0gQNgy4uaCRglJaqH8ULmg/rsb03WuiPaDucJ8SRaAZGOQY87QZPCS+SoRYEh76RNkyEhaEC2ju5BfSVeGmEExn/JgLgjUoyaP1vQtAQU/pbwtl8H/0r+6HtMz7LvglHYmDhrfEbK0rqBA2ijTlqAWA9xd8jMygO23AheZ//o5Y/20dvNL9NLilPyJFzivdUUYsnDuIZTc/nPNAZ3nLLLXYcHjIN+/TpY9vTKRL+4GbG8mPskYXMKMJzNDwalz+PeHsYHb6zxNojTAEIJp/1liniyX55zfgaIkinzT7YJ+EzPMYV7Xg5bxguZc3hCT3kCPyO+FgLvyn6u7gOnM/4fRvdhv/ZT6693uVhRQWNezob4WnODcLlDWbg/GOU0df5c4dhSEiwtDR22gEZwd7TAUK+tIGy7kUgw5AQfNSY5rMIiU8UoX3Q5xK+JNsSCAtiFBK5ok8hAsU+OKe0cYYEOCa/PcfPeox/9k1fw7HR7ny6PusQPgQOA598BMSa/ZBVCUR0OA8MX+AsIK4VJZWCVmx4D827/UDHz43CeB/WHx4P4dH4fBNRPkhN5/wRdiFsimBzfvFcPHgsIXtoacELGh16RUGk6VRXWmklizxce+21NoTAGFiaQeQJ+5OsFTIStCLACxrhT8J2hCcIC5BdRciDjtgv8QmOonwQ4oyeR8YWCHESYiahiLAO1jjrJWiFBUEjBLY8E77xmpjG468z4WrC4yRO4Pmzz7iHmwb4zXhmoc05jCNBKwJw4UnJxVXnpiPmHu18o4tPw/VhpvIu3NDLCnGETvR3lLVEt/GdFxY6Vnv8fLKQjMKcRMI2eGjRihwi/0RDjvFrG1+i1xox8yH0+DVmYRyX8VrGZwmj85k0wXBKPAwdGokXNGLShHp8emg2ICuIUF1ZcXQylbDEV3RMKg4z+Rl7qggkrfiQ4rIWshLZtiILVioeIMkYS4PGTVw+xDEVD4PR/I747yvPwtSD+LksbWGQmzG9XMPYIfeJL0kVh4oLJHcsT7WFXED4j7GZfNwftFuuBUkM8etYngXjMH5d4wvJTPRXhaZQApOP67g8JF7QqPTBXIlsChoDlwxYljZI66GxkLGX7RuK8kSkwVYEMjMRKjpT0mDjjS+6IMKcZ8YFKrIQxiwrfk5I7rrrrivTCCg0vg5e/LctayFTlXk3S/PQWBhbY2IoHlq0dl+uYJwHT5xqKaXBNAkG6clOCwFCVcxLXN5EjYrAPci1INmIcHD8ei5todQa9wclnuLX1y9MVyD9HCPa1zYsFPRPnE88p/ixcA6IxpCgxjgv7ZNMYJKjfFo8SU6MqWMcRb1NjHSMehJIAEM1PvbOPNR8TIWpKIkWNE4q6dh06FHKEwoo60Jw0RHJqKDFsxVJK42nP2cDX4qI1NzyQoYRDY0SMsx7Y/IrHWy8MbLkaj4chgWpvn7OS2kwv4VOo6xzHyo06NIEjYFyJm7TeZK2nK8sR8bvECw6o9LgeLmPoxNTy9uucgXji4Rmy5o7lQ3ozJnXuLxGLl5v/DpXrlzZUs1JEiHrtixjNx8gVIzZEt4mO5A2H21XeMOk2zOvi8nvJIYxP4zUeCZQMx8RD56xdibURx8vxHxS0v0x6oEMZVLwo5B0xn3vMxRDIdGCRgfii9uSQsrMcip8MG8JL8ePaxBPJ2WU1FM+w1wHKlNwkamrRgMjoYIwAjFyLh6TAumASR2lDAsXnpuB7bGIfGV+YvAMGrM9c3f4vvh8kkaNGlmCBvM8OBb2w8AzA9d+hj0dEB0UNyc3C9ZseW+W0uah0ZFhWTF5kd/Mb2AbP4aWDShzQ+iVhkWHTgkxJpNzPplbQoPwxVH5fXi0eJF4cljsnHPG/Tinzz77bE7n6q0ojKHhlXNduO6E0Di/0Xs1X/PQuEe41zDcsJJpM/yPgUcnRpUF5vCQdk26N4YXx027oKMnG5Zrwz641zp16mRzk/gtdNR0VH4uGm2Eii3cq9EpLFwrfi8Zn0zKZu4Sqdi0F66zL6uFuNM++A68H7wbys3lkhVJ2+c8EvbnOJmfxVQQ2kxokQeOjf4KEC1+bxSGTDC2MGBpj9yrvv+hn6Wdcg3pPxFs/wQF4H5inY8UXXPNNbavOBivFFAIacw40YKGlUFjAjp/X4qF8AECg2jRoBg7wevhxqRTp9HT4BAuBnqZJ0IFEC4ONzCdMGVhOA7mQ9BpY+3SeXCjU1eQWDtlsnDLaex8DouQqiB+MqqHxo7HRJFXJmUTDsEi4jEz/AbgpuBm8+NQfA+1IMvDsuahcUNTYYNOqrR5dcsD54MOj7ElKnrQYTIJEyOAMSREHKFiPYKLoJERSJiMuSp4k/xeOk86WQyR5clKyxd09MzZ4dovTXjzNQ+Ne4UJskDoCAFjbiD3HeJBdIFrwzVAiLmX2J72xXsYdIgc7YJ7mlqOdGBsS2gKEWN7OjSEkd+MURT1SjgHzFXCa2WOIGXJ2B9iThiUe5H2w1MnyLRlThL7x7BCaHPJiggakRj6EhKtolMyQoO2Rjk3wBikD+KacM4xZqm1iAhF+1KMctpftJ1R+opzxT3hoR9k/75vwiv1hQ3icG/RZy9rkne+SLSg0eBoaIDVSkP0bjcFVBEPoAHhbnOD0+i4AYCOl7kmlAHCUsHyBqxahJLxB1xvLFtf647OgzESxqqoLwiEIhBTbgTGWuLWHFYsn8VaQlSxeGncxPf5DMfF+9G6eAjg0sZH4pTmoeUarGy8LX4vIJbc3IgnIk/nz6RJziMNj99OqAbLEiuY344VSYgUwY+XY0oi+fDQOI8YRiR9eOjMCDlhiNE5Ea7G8+W+x5DBs0TcMOBIP+d+5FpwL1MNgnsPrxnjjQnyGBfcwxgeCBDhTcqcRaHzxNDj9/pMUKIQGDccI0YbokD78uKLQHAMPqqSK1ZE0JIA557+hknXgAFP2yOUyMI1o2/E2IwaXxjpGI9EVjwIGkYHY64YRUz7YTvarn9CRVmCRt9HCbu4EV8oEi1oXMS4oPkxLQSNBgn+GWWEAumEfQVoxt5okGQJ0sjwroALSyPHc6MsExWm6Rjw6kiMoNMm5Mh3833M7WL2Px03FnK01A3QgWAZE3pD0OgwsKzxlvAW8SoRWm4sDyEgql6Uh0IIGp0npWz8Y2FoXPx2xnQQKRoV5w5DgtAvnifnHc+BDhBrkcaF54x1yO+NdtJJJB+ChgfM9xDi9XCeiUZwjyFkvvAs4kJnh7jQQXGPUp2F5BjuWe49OjS8NaILiB3thLA5IAysJzyJAeeffwXeQ8ML8GPWhMDwwnlNxIPjIgztw48YOgga7+WSYhc0QsucQ587QMiRtsj1xVjnL30TRuKyBA0BJPTPVAWqjxA54v7CsPGGR1mCxv2GJ8d9FQKJFjREgJAVxAWNEId/Ci9WBA0XCxFrlVAYNz0NkmQKXHAaI54YrjPjWjRqOmc8EV/nDuuF+DqxY0KO3DRU1/fPmEKgSBZhfAyLhWMihEHnzg2HcOKZcFP55Ay8FG4cEirofDx0Qv57l0UhBI0sL84/nhhg6XPMdF40ErwtGhOGBeNpnBs8YsYJgaxMxiv9GB+vJWjlg8eCYAR5uAYIC1Y7XhHQeeHx461xbvG+uG8xPLg/MSo479z/eFBcKzpAUtaJPGCUYZggfCQJYIUTiqPd0GnSRvHqSJYg2sBr/zBXwGBhXxgz/l4nnMk1x4jJJcUuaBiHGMn+WvuQYxSuMSK0LEFDjLiXuMYY8Vw3+jP6TsKOgKDRtkuDfhJPP4QpDJBoQSOkiMcFJBkQ3vKC5h9TAFigvId3RAdKEgMhGD7PTY/oYInyGvHB/faPfGF/CCDhFCbQUtcMEEAEhM9yUWnMLNxkdBZ4IniGDJLTwdOIucn43ujcIX4r1i8Wtw+X0glhPcdTcZdGIQSNY8OYoNFg1dORI/J0WpwvwlR4oowT0ulxjrD+CKUS2iWBhw4UC957afEQSdLIl6BhgOFN+WLOeG0UC8YQ8+cPUcKLxitinIxOifuXMTEseCCkTrvwyUcYftyf3LOMl2FQYeQRFucpFIA3QBiR+5aQI+FiIgsYjFzf6ER01kXrfpItR1QlGonIBcUuaIDA+FJ3hI9ph9E5sRgW8faEx87n/FMwgHuCpA8+i9HNZ4B9EzUB3ucxUYgd7Zi+yUdm+DxCWFZ2cz5JtKBhSdCgaJgIDzewFwXcci8IiB1ZaT6FmYuMBxX/HrwzLjYhGxqib5wIGyLD4LiHsI3PZiRBgpAk3pcXVCwejofXHCNjR1iqrPfbcBz8Zjp3n2LMMdDgEb/yUghB80YAVjxhJrwELD1+G50o4S88M0IRJIDQ2ROyYh3/0/lxrbHYOed4Z3TA8fHHJJEvQeM+pvNh4N/fSxhrXuCAe56Qub/nET3C5dFt+CzZwb7T438Mvmg7QTx9iBJoV9yzbEPVeESL9hGtm8i9QRgLIyU6TYTsXgycXI+3pEHQiEYhMEA/iDceTdsnHIlXHe3j8MSpkB8t+ss+fCSIKVAk0wHtkTYMRJHwwvAKMewx5v34HecZwyaUcmCJFjQaDokTWJ+hZNmUBvFurJpo4/aVHhh34jf4cQgy2FhXkXkuhRA0D43IH2v0uvH7/Hwjwo38z7acA59pSejEd7A0CN5L4hw1T74EDfCm6Fj8+FS+ob3hafO4kDjMSST0jvft4doSFi3vuPCKkAZBI8Pap+pjeDD9IgrtDQMy2p4w8Nku2k4ZhvFPcud9n9lJ2/T75H2cBgxYFgx5rj/rGLv1UasQSLSgecg6XNHHg+QSwp94cNHfxU3IDeQf4+AhHBQdSysPhRQ08S/5FDQMAO4pHz7MN3SUdGw+YzgK4ad46JjOMV9VS9IgaMC0HhLWylNIItvg/fthnJAoCkGDkC17ji2Xx7eseWgiP+RrHlqUbNcSzRW5vP/jpEXQ8MIIB0erweQLhhVKM2YKTdEIWpqRhxYG+fTQxNJJi6CJkkjQigAJWhhI0MJAgpZeJGhFgEKOYVCIkKMoiQQtvUjQigB5aGEgDy0MJGjpRYJWBEjQwkCCFgYStPQiQSsCJGhhIEELAwlaepGgFQEStDCQoIWBBC29SNCKACWFhIGSQsJAgpZeJGhFgDy0MJCHFgYStPQiQSsCJGhhIEELAwlaepGgFQEKOYaBQo5hIEFLLxK0IkAeWhjIQwsDCVp6kaAVARK0MJCghYEELb1I0IoACVoYSNDCQIKWXiRoRYAELQwkaGEgQUsvErQiQEkhYaCkkDCQoKUXCVoRIA8tDOShhYEELb1I0IoACVoYSNDCQIKWXiRoRYBCjmGgkGMYSNDSiwStCJCHFgby0MJAgpZeJGhFgAQtDCRoYSBBSy8StCJAghYGCjmGgQQtvQQnaO3atYuvFstg9OjRErQAQNDq1Knjxo0bF39L5JG///5bgpZSghO05s2bu9mzZ7v58+e7uXPnalnGMm/ePNevXz+38sorS9AKDIK2zjrruAEDBpS4TlrysyxYsMB99tlnbuONN5agpZCgBG369Olu3333dQ0bNizIcliLA0qsS8py8MEHW7ajKBzDhw+367DffvuVuD5JWDjuTTfd1FWqVMntuuuurnHjxiW2ScrSunVrN2vWrPglEkVOUILG2NmcOXNKWF35WD6bPcNd8kjzEuuTtCxatCh+SkUe4fxzHQp1D6/oMmPGDNe2bVsTNMLYX3/9tUUA4tslYcFT+/PPP+OXSBQ5QQlaIRk3bbg796Gj46uFSA0IAV4ZgjZ06ND420IEjwTtvwyZ1NfEjOWWCR3jbwuRCq699lpLLkLQ6tWr51599dX4JkIEjQTtv3gx88uXP8yMbyJE0dOsWTMTM5YaNWq4wYMHxzcRImhSL2ifLJhWQtAUehRpg/EmMmW9oPnEkGnTpsU3FSJYUi9ohBhHvj0gI2T+fyHSBMkfUTFjYZL4yJEj45sKESypFjS8MwTs+Y/HLOGZEXL89Y+fY1sLUbyMHz++hKDhsZ155pnxTYUIllQLmieaFCJE2mC+1sknn1xC0LyX9s8//8Q/IkSQSNDc/8KOEjSRVqg9ucEGG5QQM79ofqNIChK0/3LN2NYSNJFaeDoACSD169d3W2+9tatcubLbZZddXN26de31Tz/9FP+IEEEiQXNLpu0LkWbee+89K7BMgV8hkoYEzUnQhPBMnjzZxs0WL14cf0uI4JGguX8FTVVCRNp58803TdB+/fXX+FtCBI8Ezf0raKTwC5FmJGgiyaRe0L79eUFG0F6fOSH+thCpQoImkkzqBS1aJUSItCNBE0km9YLWZfxFGj8T4v8jQRNJJtWCRnkr753xPDQh0o7PcpSgiSSSakHzJa8ue7RF/C0hUok8NJFkUi1oCBmC1u/lrvG3hEglEjSRZFIraNFkEDIdhRASNJFsUitoqt8oREkkaCLJpFbQvJhJ0IT4FwmaSDKpFLRodqPGz4T4FwmaSDKpFDRS9L2gTZ0zKf62EKlFgiaSTCoFzWc3Mo4mhPgXCZpIMqkTNJ8MgqgRehRC/IsETSSZ1AmaDzWqMogQJZGgiSSTKkGjXqMyG4VYOhI0kWRSI2jPfzwmI2YqRCxE6UjQRJJJhaB9smBaRswYO/vyh5nxTYQQToImkk3RC1rUM1OoUYiykaCJJFN0gkbmIh4ZQhYtb8VCdX0hxNKRoIkkU1SCRpHhqIBJzISoGBI0kWSKQtD8c83iC0+jVnq+EOVHgiaSTFEIWlTEyGBUOSshlg8JmkgyiRY0shV9GSuW12dOiG8ihKgAEjSRZBItaIQUvZgptCjEiiNBE0km0YIWDTMKIVYcCZpIMokVtGgiiBAiO0jQRJJJpKBF0/MJOwohsoMETSSZRApa1DtjErUQIjtI0ESSSZygRUtZKatRiOwiQRNJJnGCFi1nJYTILhI0kWQSJ2hezCRoQmQfCZpIMokVtH4vd42/JYRYQSRoIskkStAoaaXxMyFyx5QpU0zQFi9eHH9LiOBJlKD5MlfyzkSITJ8+3Q0bNswNHTo0kcuIESNc586dXfXq1d2gQYMS/VueeOIJ9+OPP8YvkShyEiNo1G2UdyZCplevXq5mzZquSpUqrmrVqolcOPZKlSqVWJ+0pX79+u7999+PXyJR5CRG0KjV6AWNh3gKERrXX3+9q1atmmvZsqXr1q1bIpfu3bu7Pn36lFiflKVnz56uS5cubqONNnJTp06NXyJR5CRG0LyYjXx7QPwtIYIAQWP8afTo0fG3RB757bffTNDefffd+FuiyEmEoFENxAuaKoOIUPGC9thjj8XfEnnkl19+kaCllEQIGkkgmnsmQkeCFgYStPSSCEGLPsRTiFCRoIWBBC29JELQvJhJ0ETISNDCQIKWXiRoQmQJCVoYSNDSS6IETc8+EyEjQQsDCVp6SZSg3TKhY/wtIYJBghYGErT0kihB41loQoSKBC0MJGjpJXhBi5a80hw0ETIStDCQoKWXYAXNe2PRJ1SDRE2EigQtDCRo6SVYQUO4eFxMvIbjkEl945sKEQQStDCQoKWXYAUNELFrxra2v0yuZvn25wXxzYQIAglaGEjQ0kvQgubFzC8ImhChIkELAwlaegla0HjuWVTQCD8KESoStDCQoKWXoAWNMTNfxxFvTc9BEyEjQQsDCVp6CVrQABFDzIQIHQlaGEjQ0kvwggZkOwoROhK0MJCgpZdECJoQSUCCFgYStPQiQRMiS0jQwkCCll6CELQpH8ywZcyLk13/EY+VWDrdNbDEOhb/OSFCQIIWBhK09JIXQRsz8WXX6c57XdMLrnP9B/dyU169y338Vn/n5g/J+sK+Jz53h+vdr7trcWUX13vgA/HDESInFLOg/fnnn+63336Lrw4SCVp6ybmgTZn+UUbE4uKT62XhrIEmbm0693YLf/k1fmhCZJV8Ctrvv//uXn/9dTdixAg3evRo9+STT9r3jhw50r344ovxzVeYt99+27300kvun3/+ib8VHBK09JJzQWtzfdcSQpPvpdOtXdyDYx6NH5oQWSWfgvbNN9+4Sy65xO2yyy5u1113ddtvv73ba6+9XL169dxZZ50V33yFeeCBB9wdd9xhntrSQFwnTSp8RrIELb3kXtA63ejGjLzYderTwTU9/6q8hBzHjO37v5Bj+46u9x3t3ZSnz3X9HxoWPzQhsko+BS3KI4884lZZZZXMa0SnY8eOJnAsn3zyia0/99xz3Y033ujatGnjTjjhBDd+/Hj35ptvugMPPNDW4/Xdfffd7vLLL7fPN2nSxN1yyy3mlQ0fPtzdeeedtp9vv/3WNW3a1DVo0MAdf/zxJiDvvPOOq1y5slt33XVd586d3RdffOHuu+8+E1i+66mnnsocX66RoKWXvAia+/jszDJmxIWu/4D27tIuV5vAtbnuevOgEDoWxAhRWtby4IibM59hH03P72gC1qn3FbZ/RMx/pwRN5INCCRpiU6VKlczrF154we28887umGOOcY0aNTKPbdGiRW6dddZxa6+9tjvggAPcBhts4OrWreuOPvpot+2227o111zThACxq1mzpjv22GPdPvvs4+rUqWMCRiizX79+No6G6OEVnnbaaSaYhDvfe+89V6lSJbf55pubCLZt29Ztttlmtv+tttrK7b777pEjzi0StPSSd0ErxCJBE/mgUII2bNiwjKDNmTPH7b///u7iiy92vXv3dl26dHFVq1Z1ffr0sU4eoUGUOnXqZN4U42+ECREmhPC8884z4fP079/ffhchx7vuusu8v3nz5rlu3bq57t27u9NPP91dccUVbvHixW7DDTc0Tw9q1arljjvuONerVy/7ztVXX93Nnj07s99cIkFLLxI0IbJECIL26aefup122sm8Izwjlvr165sgbb311iZycM0115gAPfvss+7ll182QXv66afdOeecY+NxHsKZiNyQIUPcPffc47788kt37bXXui222MLCjnvvvbeFJxE0vD7OAay88spu/fXXd1tuuaXbZptt7LslaCLXSNCEyBIhCNpnn33mdtxxRxMfxrXIhBwzZoz76quvTOTwzPCyrr76auv0ETSyF/fcc0/7yzjbeuutl9k3iSB4dw8++KAbNGiQe+aZZ8yzGzhwoJs7d66936FDB/fHH39YeNJ7aBwPQvjWW2+55557zsKiv/6an0xjCVp6CUbQBnZrbDF4/t5zY0PXrsX2rtEe67nvJ59u79/SsUHm/Tuu28cd12Qz16Ft3RL7KW2RoIl8UChBw/taaaWVMq8JIeIZ7bHHHtaxX3nllTaGVrt2bXfqqae6n376yUQID4rEkOeff97GuPDu8NA23nhjS/bYYYcdzItDiB566CELP86YMcPCjNttt52NvRHeJKTJukMOOcQSQ/DgCDXyecR1tdVWcw0bNowccW6RoKWX4AQtuq5m9VXcacdsbf97QYu+X6PaKiX2U9oiQRP5oFCCNnXqVAv7Rbnttttcq1atbPwKrw1uuukmS+4gPEh4kfG1jz/+2M2cOdPGx2bNmmWfOeigg9ztt99u4kamIvAdCCUZj9OmTbNEE7IhGXfD2+vbt6+NxzGV4P777zdRwTM85ZRTXPv27W27fCFBSy9BC1rHdvXcyiuvZP+XJmhrr1G1xH5KWyRoIh8UStAQmb/++qvEup9//tnEy8M2f//9t/3PX16zHQuvv/76a/Pg8LqAz/rt/XYe9k2YEdgPYUze5290rhreYFlz13KBBC29BC1o74w6LrPOC9rqNavY36qrruzmvnxKif2UtkjQRD4olKBlC0QKT42EkSQjQUsvQQvaaw8dXULQ+P+P6a3d++NOcGvUquJmTmhRYl/xRYIm8kHSBQ0P64cffjBPLclI0NJL0IK2y7Zr28L/pYUc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>
 

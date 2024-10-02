@@ -11,3 +11,4 @@ class ProductEntry(models.Model):
     description = models.TextField()
     time = models.DateField(auto_now_add=True)
     
+    

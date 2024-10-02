@@ -6,8 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.shortcuts import render
-from django.shortcuts import render, redirect   # Tambahkan import redirect di baris ini
+from django.shortcuts import render, redirect, reverse 
 from main.forms import ProductEntryForm
 from main.models import ProductEntry
 from django.http import HttpResponse
@@ -20,6 +19,7 @@ def show_main(request):
     context = {
         'name': request.user.username,
         'application' : 'Shopeeta',
+        'npm' : '2306165843',
         'name' : 'Dandi Apriyansyah',
         'class' : 'PBP A',
         'product_entries': product_entries,
@@ -89,3 +89,26 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    # Get product entry berdasarkan id
+    product = ProductEntry.objects.get(pk = id)
+
+    # Set product entry sebagai instance dari form
+    form = ProductEntryForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    # Get product berdasarkan id
+    product = ProductEntry.objects.get(pk = id)
+    # Hapus product
+    product.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))

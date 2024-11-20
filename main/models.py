@@ -10,5 +10,6 @@ class ProductEntry(models.Model):
     price = models.IntegerField()
     description = models.TextField()
     time = models.DateField(auto_now_add=True)
+    amount = models.IntegerField(default=1)
     
     
